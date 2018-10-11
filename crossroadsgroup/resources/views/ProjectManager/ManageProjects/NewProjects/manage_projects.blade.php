@@ -1,0 +1,118 @@
+@extends('ProjectManager.Layouts.master')
+@section('page-title')
+New Projects
+@endsection
+@section('content')
+<div id="content" class="span10">
+	<ul class="breadcrumb">
+		<li>
+			<i class="icon-home"></i>
+			<a href="{{url('project_manager/dashboard')}}">Dashboard</a> 
+			<i class="icon-angle-right"></i>
+			<li><a href="{{ url('project_manager/new_projects') }}">New Projects</a></li>
+		</li>
+		
+	</ul>
+	<!-- <h2 class="center">Get Project's Survey Reports</h2> -->
+	<!-- <div class="row-fluid padding10b">
+		<form class="form-horizontal">
+			<div class="span3">
+				<select data-placeholder="Select Project" id="project">
+                      <option disabled selected>Select Project</option>
+                      <option value="">Project A</option>
+                    </select>
+			</div>
+			<div class="span3">
+					<select data-placeholder="Select Provider" id="provider">
+                      <option disabled selected>Select Provider</option>
+                      <option value="">Provider A</option>
+                    </select>
+			</div>
+			<div class="span3">
+				<select data-placeholder="Select Duration" id="duration">
+                      <option disabled selected>Select Duration</option>
+                      <option value="">Daily</option>
+                      <option value="">Weekly</option>
+                      <option value="">Monthly</option>
+                    </select>
+			</div>
+			<div class="span3">
+				<button type="submit" class="btn btn-success">Get Report</button>
+			</div>
+		</form>	
+	</div> -->
+	<div class="row-fluid pm-buttons">
+		<div class="span6">
+			<!-- <button class="btn btn-primary">
+			Export Excel
+			<i class="halflings-icon file white"></i>
+			</button> -->
+		</div>
+		<!-- <div class="span6">
+			<a href="{{ url('admin/add_new_project') }}">
+			<button class="btn btn-primary float-right">
+			<i class="halflings-icon plus white"></i>	
+			Add New Project</button>
+			</a>
+		</div> -->
+	</div>
+	<div class="row-fluid sortable">		
+		<div class="box span12">
+			<div class="box-header" data-original-title>
+				<h2><i class="halflings-icon white user"></i>&ensp;New Projects</h2>
+				<div class="box-icon">
+				<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+				</div>
+			</div>
+			<div class="box-content">
+				<table class="table table-striped table-bordered bootstrap-datatable datatable">
+				  <thead>
+					  <tr>
+						  <th>Sr No. <a><i class="icon-sort"></i></a> </th>
+						  <th>Project Name <a><i class="icon-sort"></i></a> </th>
+						  <th>Associated With <a><i class="icon-sort"></i></a> </th>
+						  <th>Client Name <a><i class="icon-sort"></i></a> </th>
+						  <th>Required Surveys <a><i class="icon-sort"></i></a> </th>
+						  <th>Make Schedule <a><i class="icon-sort"></i></a> </th>
+						  <th>Status <a><i class="icon-sort"></i></a> </th>
+						  <th>Posted Date <a><i class="icon-sort"></i></a> </th>
+						  <th>Actions</th>
+					  </tr>
+				  </thead>   
+				  <tbody>
+				  <?php $i=1;?>
+				  @foreach($project_data as $project)
+					<tr>                    
+						<td>{{$i++}}</td>
+						<td>{{$project['project_name']}}</td>
+						<td>{{$project['project_manager_name']}}</td>
+						<td>{{$project['client_name']}}</td>
+						<td>-</td>
+						<td class="center">
+							<a href="{{url('project_manager/make_schedule/'.Hashids::encode($project['project_id']))}}">
+								<span class="label label-success">Make Schedule</span>
+							</a>
+						</td>
+						<td><span class="label label-success">{{$project['project_status']}}</span></td>
+						<td>{{$project['posted']}}</td>
+						<td> 
+							<a class="btn btn-success" href="{{url('project_manager/project_info/'.Hashids::encode($project['project_id']))}}">
+								<i class="halflings-icon white zoom-in"></i>
+							</a>
+							<!-- <a class="btn btn-info" href="{{ url('admin/edit_project/'.Hashids::encode($project['project_id'])) }}">
+								<i class="halflings-icon white edit"></i>
+							</a>
+							<a class="btn btn-danger" href="{{url('admin/delete_project/'.Hashids::encode($project['project_id']))}}">
+								<i class="halflings-icon white trash"></i> 
+							</a> -->
+						</td>
+					</tr>
+				@endforeach	
+				  </tbody>
+			  </table>            
+			</div>
+		</div>
+	</div>
+</div>
+
+@endsection
