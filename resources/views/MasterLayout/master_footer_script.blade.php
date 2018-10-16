@@ -98,8 +98,12 @@ name:request_url,
 _token: _token,
 },
 success: function (res) {
-console.log(res);
-}
+  @if(Session::has('success'))
+  toastr.success("{{ Session::get('success') }}");
+  @endif	
+  @if(Session::has('error'))
+  toastr.error("{{ Session::get('error') }}");
+  @endif
 });
 });
 setInterval(function () { check_user_session(); },105000);

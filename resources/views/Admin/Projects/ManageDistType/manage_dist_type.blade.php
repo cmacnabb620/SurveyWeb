@@ -12,6 +12,8 @@ Manage Distribution Types
 			<a href="{{url('admin/dashboard')}}">Dashboard</a>
 			<i class="icon-angle-right"></i>
 		</li>
+		<li><a href="{{ url('admin/project_settings') }}">Project Settings</a></li>
+        <i class="icon-angle-right"></i>
 		<li><a href="{{url('admin/manage_dist_type')}}">Manage Distribution Types</a></li>
 	</ul>
 	

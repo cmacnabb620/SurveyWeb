@@ -68,5 +68,8 @@ Route::post('importExcel', 'ModalController@importExcel');
 
 
 //Maatwebsite xl or csv upload with roster data start
-Route::get('roster_data_upload','RosterDataUploadController@getFileUploadPage');
+Route::get('roster_data_upload/{client_id}/{project_id}','RosterDataUploadController@getFileUploadPage');
+Route::get('downloadExcel/{type}/{clientid}/{projectid}','RosterDataUploadController@downloadExcel');
+Route::post('store_roster_file_data','RosterDataUploadController@storeClientRosterData');
 //Maatwebsite xl or csv upload with roster data end
+

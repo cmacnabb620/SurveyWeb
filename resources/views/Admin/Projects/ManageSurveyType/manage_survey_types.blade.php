@@ -12,6 +12,8 @@ Manage Survey Types
       <a href="{{url('admin/dashboard')}}">Dashboard</a>
       <i class="icon-angle-right"></i>
     </li>
+    <li><a href="{{ url('admin/project_settings') }}">Project Settings</a></li>
+        <i class="icon-angle-right"></i>
     <li><a href="{{url('admin/manage_survey_types')}}">Manage Survey Types</a></li>
   </ul>
   

@@ -46,11 +46,11 @@ Manage Providers
 					<thead>
 						<tr>
 							<th>Sr No. <a><i class="icon-sort"></i></a> </th>
-							<th>Providers Name<a><i class="icon-sort"></i></a> </th>
-							<th>Surveys Required<a><i class="icon-sort"></i></a> </th>
-							<th>Surveys Completed<a><i class="icon-sort"></i></a> </th>
+							<th>Providers Name <a><i class="icon-sort"></i></a> </th>
+							<th>Surveys Required <a><i class="icon-sort"></i></a> </th>
+							<th>Surveys Completed <a><i class="icon-sort"></i></a> </th>
 							<th>Last Updated <a><i class="icon-sort"></i></a> </th>
-							<th>Status<a><i class="icon-sort"></i></a> </th>
+							<th>Status <a><i class="icon-sort"></i></a> </th>
 							<th>Actions</th>
 						</tr>
 					</thead>

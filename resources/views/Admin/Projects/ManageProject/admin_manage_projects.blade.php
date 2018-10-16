@@ -88,33 +88,30 @@ form{
 						  <th>Sr No. <a><i class="icon-sort"></i></a> </th>
 						  <th>Project <a><i class="icon-sort"></i></a> </th>
 						  <th>Manager <a><i class="icon-sort"></i></a> </th>
-						  <th>Client <a><i class="icon-sort"></i></a> </th>
 						  <th>Required Surveys <a><i class="icon-sort"></i></a></th>
 						  <th>Status <a><i class="icon-sort"></i></a> </th>
-						  <th>Posted <a><i class="icon-sort"></i></a> </th>
-						  <th>Last Updated <a><i class="icon-sort"></i></a></th>
-						  <th>Actions</th>
+						  <th class="center">Admin Posted <a><i class="icon-sort"></i></a> </th>
+						  <th class="center">Actions</th>
 					  </tr>
 				  </thead>   
 				  <tbody>
 				  <?php $i=1;?>
+				  @if(isset($project_data))
 				  @foreach($project_data as $project)
 					<tr>                    
 						<td>{{$i++}}</td>
 						<td>{{$project['project_name']}}</td>
 						<td>{{$project['project_manager_name']}}</td>
-						<td>{{$project['client_name']}}</td>
 						<td>-</td>
 						<td><span class="label label-success">{{$project['project_status']}}</span></td>
-						<td>
-						@if($project['posted'] != NULL)
+						<td class="center">
+						@if($project['admin_posted'] != NULL)
 							<a class="btn btn-success"><i class="icon-ok white"></i></a>
 						@else
 							<a class="btn btn-info" href="{{url('admin/make_post/'.Hashids::encode($project['project_id']))}}"><i class="icon-remove white"></i></a>
 						@endif
 						</td>
-						<td>{{$project['last_update']}}</td>
-						<td> 
+						<td class="center"> 
 							<a class="btn btn-success" href="{{url('admin/project_info/'.Hashids::encode($project['project_id']))}}">
 								<i class="halflings-icon white zoom-in"></i>
 							</a>
@@ -126,7 +123,8 @@ form{
 							</a>
 						</td>
 					</tr>
-				@endforeach	
+				@endforeach
+				@endif
 				  </tbody>
 			  </table>            
 			</div>

@@ -19,7 +19,7 @@ class AdminDashboardController extends Controller {
 
 //Admin Login Form displayed
     public function index(Request $request){
-    	if(Auth::check()){ 
+    	if(Auth::check()){
             return view('Admin.admin_dashboard'); 
     	}else{
     		return redirect()->to('/')->with('after-logout-access-dashboard', 'Sorry, you can not access dashboard with out Login.');

@@ -17,94 +17,70 @@ Inactive Surveyors
 	<div class="row-fluid sortable">		
 		<div class="box span12">
 			<div class="box-header" data-original-title>
-				<h2><i class="halflings-icon file white"></i>&ensp;Inactive Surveyors</h2>
+				<h2><i class="halflings-icon white user"></i>&ensp;InActive Surveyors</h2>
 				<div class="box-icon">
-				<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+					<!-- <a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a> -->
+					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+					<!-- <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a> -->
 				</div>
 			</div>
 			<div class="box-content">
 				<table class="table table-striped table-bordered bootstrap-datatable datatable">
 				  <thead>
 					  <tr>
-						  <th>Sr No.</th>
-						  <th>Surveyor Name</th>
+						  <th>Sr No. <a><i class="icon-sort"></i></a> </th>
+						  <th>Surveyor Name <a><i class="icon-sort"></i></a> </th>
+						  <th>Username <a><i class="icon-sort"></i></a> </th>
+						  <th>Start Date <a><i class="icon-sort"></i></a> </th>
 						  <th class="center">Actions</th>
+						  <th class="center">User Status</th>
 					  </tr>
 				  </thead>   
 				  <tbody>
+				  <?php $i=1; ?>
+				@foreach($inactive_surveyors as $surveyor)
 					<tr>
-						<td>1</td>
-						<td>Surveyor A</td>
+						<td>{{$i++}}</td>
+						<td>{{ucfirst(\Crypt::decryptString($surveyor->first_name))}} {{ucfirst(\Crypt::decryptString($surveyor->last_name))}}</td>
+						<td>{{$surveyor->username}}</td>
+						<td>{{$surveyor->start_date}}</td>
 						<td class="center">
-							<a class="btn btn-info" href="{{ url('project_manager/active_surveyor_detail') }}">
-							<i class="halflings-icon white edit"></i>
-							Detail View
-						   </a>
+						    <a class="btn btn-success" href="{{url('project_manager/inactive_surveyor_info/'.Hashids::encode($surveyor->main_user_id).'/'.Hashids::encode($surveyor->user_type_id))}}">
+								<i class="halflings-icon white zoom-in"></i>  
+							</a>
+						</td>
+						<td class="center">
+						@if($surveyor->active == 0)
+							<a class="btn btn-danger" href="{{url('change_user_status/'.Hashids::encode($surveyor->main_user_id))}}">
+							<i class="halflings-icon white remove"></i> 
+							</a>
+						@else
+							<a class="btn btn-success" href="{{url('change_user_status/'.Hashids::encode($surveyor->main_user_id))}}">
+							<i class="halflings-icon ok white"></i> 
+							</a>
+						@endif	
 						</td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>Surveyor B</td>
-						<td class="center">
-							<a class="btn btn-info" href="{{ url('project_manager/active_surveyor_detail') }}">
-							<i class="halflings-icon white edit"></i>
-							Detail View
-						   </a>
-						</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>Surveyor C</td>
-						<td class="center">
-							<a class="btn btn-info" href="{{ url('project_manager/active_surveyor_detail') }}">
-							<i class="halflings-icon white edit"></i>
-							Detail View
-						   </a>
-						</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>Surveyor D</td>
-						<td class="center">
-							<a class="btn btn-info" href="{{ url('project_manager/active_surveyor_detail') }}">
-							<i class="halflings-icon white edit"></i>
-							Detail View
-						   </a>
-						</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>Surveyor E</td>
-						<td class="center">
-							<a class="btn btn-info" href="{{ url('project_manager/active_surveyor_detail') }}">
-							<i class="halflings-icon white edit"></i>
-							Detail View 
-						   </a>
-						</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>Surveyor F</td>
-						<td class="center">
-							<a class="btn btn-info" href="{{ url('project_manager/active_surveyor_detail') }}">
-							<i class="halflings-icon white edit"></i>
-							Detail View
-						   </a>
-						</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td>Surveyor G</td>
-						<td class="center">
-							<a class="btn btn-info" href="{{ url('project_manager/active_surveyor_detail') }}">
-							<i class="halflings-icon white edit"></i>
-							Detail View
-						   </a>
-						</td>
-					</tr>
+				@endforeach
 				  </tbody>
 			  </table>            
 			</div>
 		</div>
 	</div>
+
+</div>
+	
+@endsection
+
+@section('page-script')
+<script type="text/javascript">
+  @if(Session::has('message'))
+      toastr.options.timeOut = 1500; 
+      toastr.success("{{ Session::get('message') }}");
+  @endif
+  @if(Session::has('error'))
+      toastr.options.timeOut = 1500; 
+      toastr.error("{{ Session::get('error') }}");
+  @endif
+</script>
 @endsection

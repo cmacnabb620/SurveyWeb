@@ -10,6 +10,7 @@ use App\Models\Contact;
 use App\Models\Address;
 use App\Models\Tag;
 use App\Models\TagBridge;
+use App\Models\SurveyorAdditionalInfo;
 use App\Models\SurveyorTypeChangingDate;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -329,6 +330,7 @@ class SurveyorController extends Controller {
             $delete_contact=Contact::where('contact_id',$user_record->contact_id)->delete();
             $tagbridge_record=TagBridge::where('user_id',Session::get('tag_bridge_user_id'))->delete();
             $tagbridge_record=Address::where('address_id',Session::get('address_table_id'))->delete();
+            $surveyor_info_delete =SurveyorAdditionalInfo::where('surveyor_id',$userid)->delete();
             return redirect()->back()->with('message', 'Surveyor Deleted Successfully');
             }catch (Exception $e) {
              //return redirect()->to('/admin/surveyors')->with('error', 'Somethig Went Wrong');

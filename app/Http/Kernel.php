@@ -54,6 +54,7 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\Admin\AdminMiddleware::class,
         'project_manager' => \App\Http\Middleware\Project_Manager\ProjectManagerMiddleware::class,
         'surveyor' => \App\Http\Middleware\Surveyor\SurveyorMiddleware::class,
+        'check_surveyor_info' => \App\Http\Middleware\Surveyor\CheckSurveyorInfoMiddleware::class,
         'quality_user' => \App\Http\Middleware\QualityUser\QualityUserMiddleware::class,
         'finance_user' => \App\Http\Middleware\FinanceUser\FinanceUserMiddleware::class,
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,

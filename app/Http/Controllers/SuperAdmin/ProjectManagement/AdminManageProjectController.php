@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\SuperAdmin\ProjectManagement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -39,7 +38,7 @@ class AdminManageProjectController extends Controller {
           $data['project_manager_name']=\EnvatoUser::get_user_full_name($project->project_manager_id);
           $data['project_status']=\EnvatoUser::get_project_status($project->project_status);
           $data['last_update']=$project->last_update;
-          $data['posted']=$project->posted;
+          $data['admin_posted']=$project->admin_posted;
           $data['project_id']=$project->project_id;
           $project_data[]=$data;
           }
@@ -70,25 +69,29 @@ class AdminManageProjectController extends Controller {
            if($project_check >=1){
            return response()->json(['status' => 'fail', 'message' => "Project Name Already Existed."]);
            }else{
+           $language_ids= implode(",",$request->get('language_id'));
+           $survey_type_ids= implode(",",$request->get('survey_type_id'));
             $current_time = Carbon::now();
             $add_new_project = new Project;
             $add_new_project->project_name = $request->get('project_name');
             $add_new_project->client_id = $request->get('client_id');
             $add_new_project->project_manager_id = $request->get('project_manager_id');
-            $add_new_project->language_id  = $request->get('language_id');
-            $add_new_project->survey_type_id = $request->get('survey_type_id');
+            $add_new_project->language_id  = $language_ids;
+            $add_new_project->survey_type_id = $survey_type_ids;
             $add_new_project->report_freq_id = $request->get('report_frequency_id');
             $add_new_project->project_status = $request->get('status_id');
             $add_new_project->last_update = $current_time->toDateTimeString();
             $add_new_project->save();
             //mail link sent to client for roster data update start
-           /* $client_record=Client::where('client_id',$request->get('client_id'))->first();
-            $data = array('id'=>Hashids::encode($user_table_insert->user_id),'email'=>$request->get('email'),'fname'=>$request->get('fname'),'lname'=>$request->get('lname'),'user_name' =>$user_table_insert->username ,"body" => "Test mail","user_type" => $user_type->user_type_desc);
-            $mail_sent=Mail::send('Email.password-setup', $data, function($message) use ($data){
+            $client_record=Client::where('client_id',$request->get('client_id'))->first();
+            $client_contact=Contact::where('client_id',$request->get('client_id'))->first();
+            $data = array('client_id'=>Hashids::encode($client_record->client_id),'email'=>Crypt::decryptString($client_contact->email),'client_name'=>Crypt::decryptString($client_record->name),'project_id'=>Hashids::encode($add_new_project->project_id),'project_name' =>$request->get('project_name') ,"body" => "Invitation to client for upload rosterdata");
+
+            $mail_sent=Mail::send('Email.client_roster_data_load_link', $data, function($message) use ($data){
               $message->to($data['email'], 'Receiver')
-                        ->subject('Crossroads Group Request For Set Password');
+                        ->subject('Crossroads Group Request For Load Rosterdata');
                 $message->from('muralidharan.bora@gmail.com','Sender');         
-            });*/
+            });
             //mail link sent to client for roster data update start
             return response()->json(['status' => 'success', 'message' => "Project Stored Successfully."]);
            }
@@ -105,7 +108,8 @@ class AdminManageProjectController extends Controller {
         {
          return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400);
         }else{
-  
+        $language_ids= implode(",",$request->get('language_id'));
+        $survey_type_ids= implode(",",$request->get('survey_type_id'));
         if($request->get('project_name') == $request->get('project_original_name')){
           
         $update_project = Project::where('project_id',$request->project_id)->first();
@@ -113,8 +117,8 @@ class AdminManageProjectController extends Controller {
           $update_project->project_name = $request->get('project_name');
           $update_project->client_id = $request->get('client_id');
           $update_project->project_manager_id = $request->get('project_manager_id');
-          $update_project->language_id  = $request->get('language_id');
-          $update_project->survey_type_id = $request->get('survey_type_id');
+          $update_project->language_id  = $language_ids;
+          $update_project->survey_type_id = $survey_type_ids;
           $update_project->report_freq_id = $request->get('report_frequency_id');
           $update_project->project_status = $request->get('status_id');
           $update_project->last_update = $current_time->toDateTimeString();
@@ -125,14 +129,13 @@ class AdminManageProjectController extends Controller {
           $project_check = Project::where('project_name',$request->project_name)->count();
           
           if($project_check == 0){
-
-            $update_project = Project::where('project_id',$request->project_id)->first();
+             $update_project = Project::where('project_id',$request->project_id)->first();
               $current_time = Carbon::now();
               $update_project->project_name = $request->get('project_name');
               $update_project->client_id = $request->get('client_id');
               $update_project->project_manager_id = $request->get('project_manager_id');
-              $update_project->language_id  = $request->get('language_id');
-              $update_project->survey_type_id = $request->get('survey_type_id');
+              $update_project->language_id  = $language_ids;
+              $update_project->survey_type_id = $survey_type_ids;
               $update_project->report_freq_id = $request->get('report_frequency_id');
               $update_project->project_status = $request->get('status_id');
               $update_project->last_update = $current_time->toDateTimeString();
@@ -152,9 +155,12 @@ class AdminManageProjectController extends Controller {
     
     public function projectInfo($projectid){
       $project_id=Hashids::decode($projectid);
+
       $project=Project::where('project_id',$project_id)->first();
          $data=[];
          if(!empty($project)){
+          $language_ids= explode(',',$project->language_id);
+          $survey_type_ids= explode(',',$project->survey_type_id);
           $data['project_name']=$project->project_name;
           $data['project_report_frequency']=\EnvatoUser::get_report_frequeny($project->report_freq_id);
           $data['client_name']=\EnvatoUser::get_client_full_name($project->client_id);
@@ -169,8 +175,10 @@ class AdminManageProjectController extends Controller {
           $data['last_update']=$project->last_update;
           $data['project_id']=$project->project_id;
          }
+         $languages = Language::get()->all();
+         $survey_types = SurveyType::get()->all();
          // return $data;
-	    return view('Admin.Projects.ManageProject.admin_project_info',compact('data'));
+	    return view('Admin.Projects.ManageProject.admin_project_info',compact('data','languages','survey_types','language_ids','survey_type_ids'));
     }
 
     public function editProject($projectid){
@@ -198,16 +206,17 @@ class AdminManageProjectController extends Controller {
           $data['project_manager_id']=$project->project_manager_id;
           $data['project_status_id']=$project->project_status;
           $data['project_status']=\EnvatoUser::get_project_status($project->project_status);
-          $data['survey_type_id']=$project->survey_type_id;
-          $data['survey_type']=\EnvatoUser::get_survey_type($project->survey_type_id);
-          $data['language_id']=$project->language_id;
-          $data['project_language']=\EnvatoUser::project_related_language($project->language_id);
+         /* $data['survey_type_id']=$project->survey_type_id;*/
+          $survey_type_id=explode(',',$project->survey_type_id);
+          //$data['survey_type']=\EnvatoUser::get_survey_type($project->survey_type_id);
+          $language_id=explode(',',$project->language_id);
+          //$data['project_language']=\EnvatoUser::project_related_language($project->language_id);
           $data['last_update']=$project->last_update;
           $data['project_id']=$project->project_id;
 
           // echo "<pre>";print_r($data);echo "</pre>"; exit;
          }
-        return view('Admin.Projects.ManageProject.admin_edit_project',compact('language','survey_type','status','project_managers','clients','report_freq','data'));
+        return view('Admin.Projects.ManageProject.admin_edit_project',compact('language','survey_type','status','project_managers','clients','report_freq','data','language_id','survey_type_id'));
     }
 
   public function deleteProject($projectid){
@@ -288,7 +297,7 @@ class AdminManageProjectController extends Controller {
          
           $project = Project::where('project_id',$project_id)->first();         
           $current_time = Carbon::now();
-          $project->posted = $current_time->toDateTimeString();
+          $project->admin_posted = $current_time->toDateTimeString();
           $project->save();
           return redirect()->back()->with('message', 'Project is posted successfully.');  
         
@@ -305,7 +314,7 @@ class AdminManageProjectController extends Controller {
 
         if($project >= 0){
           $project = Project::where('project_id',$project_id)->first(); 
-          $project->posted = NULL;
+          $project->admin_posted = NULL;
           $project->save();
           return redirect()->back()->with('message', 'Project is not posted.');  
         
@@ -315,6 +324,7 @@ class AdminManageProjectController extends Controller {
         }  
 
     }*/
+
 }
 
 

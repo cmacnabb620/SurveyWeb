@@ -15,7 +15,9 @@ form{
 	<ul class="breadcrumb">
 		<li>
 			<i class="icon-home"></i>
-			<a href="{{url('admin/dashboard')}}">Dashboard</a> 
+			<a href="{{url('admin/dashboard')}}">Dashboard</a>
+			<i class="icon-angle-right"></i>
+            <li><a href="{{ url('admin/project_settings') }}">Project Settings</a></li>
 			<i class="icon-angle-right"></i>
 			<li><a href="{{ url('admin/manage_client') }}">Manage Clients</a></li>
 		</li>

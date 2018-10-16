@@ -9,8 +9,15 @@ use App\Models\UserType;
 use App\Models\Contact;
 use App\Models\Address;
 use App\Models\Tag;
+use App\Models\Language;
+use App\Models\Project;
+use App\Models\SurveyType;
+use App\Models\ReportFreq;
+use App\Models\Client;
+use App\Models\Status;
 use App\Models\TagBridge;
 use App\Models\UserProfile;
+use App\Models\SurveyorAdditionalInfo;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Support\Facades\Input;
@@ -21,19 +28,23 @@ use Response;
 use Carbon\Carbon;
 use Mail;
 use Exception;
-use Hash;
-use File;
-
 
 class SurveyorSettingController extends Controller {
 
     public function index(){
-      
-       $user_id   = Auth::user()->user_id;
-
+       $user_id     = Auth::user()->user_id;
+       $language    = Language::get()->all();
+       $languages   = SurveyorAdditionalInfo::where('surveyor_id', Auth::user()->user_id)->select('languages')->first();
+       if(!empty($languages)){
+         $languages_id = explode(',',$languages->languages);
+       }else {
+          $languages_id = NULL;
+       }
+       
       if(empty($user_id)){
             return redirect()->to('/page-not-found');
-        }else{  
+        }else{ 
+
             $surveyor_profile = User::join('user_type as usertype', 'usertype.user_type_id', '=', 'users.user_type_id')
                    ->join('contact','users.contact_id','=','contact.contact_id')
                    ->join('tag_bridge','users.tag_bridge_user_id','=','tag_bridge.user_id')
@@ -49,14 +60,12 @@ class SurveyorSettingController extends Controller {
                    ->first();
               }
 
-              // dd($project_manager_profile);
-
-        return view('Surveyor.Settings.surveyor_settings',compact('surveyor_profile'));
+        return view('Surveyor.Settings.surveyor_settings',compact('surveyor_profile','language','languages_id'));
     }
 
     public function updateUser(Request $request){
-            
-         $rules = array('fname' => 'required','lname' => 'required','address' => 'required', 'city' => 'required', 'country' => 'required','state' => 'required','date' => 'required','email' => 'required','phone' => 'required','user_type' => 'required');
+        // return $request->all();    
+         $rules = array('fname' => 'required','lname' => 'required','address' => 'required', 'city' => 'required', 'country' => 'required','state' => 'required','date' => 'required','email' => 'required','phone' => 'required','language_id' => 'required','user_type' => 'required');
         if(!empty($request->file('profile_pic'))) {
          $rules = array_add($rules, 'profile_pic', 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048');
         }
@@ -65,6 +74,7 @@ class SurveyorSettingController extends Controller {
         {
          return redirect()->back()->with('error','Something went wrong');
         }else{
+
             $current_time        =   Carbon::now();
             $user_table_record   =   User::where('user_id',Auth::user()->user_id)->first();
             $user_profile        =   UserProfile::where('user_id',$user_table_record->user_id)->first(); 
@@ -108,6 +118,26 @@ class SurveyorSettingController extends Controller {
               
             }
              /*************************User Profile Upload Start**********************/
+             /*************Language known Surveyor starts*****************************/
+             $language_ids= implode(",",$request->get('language_id'));
+             $check_surveyor_language = SurveyorAdditionalInfo::where('surveyor_id',Auth::user()->user_id)->count();
+             if($check_surveyor_language >= 1){
+
+                 $update_languages_known = SurveyorAdditionalInfo::where('surveyor_id',Auth::user()->user_id)->first();
+                 $update_languages_known->surveyor_id = Auth::user()->user_id;
+                 $update_languages_known->languages =  $language_ids;
+                 $update_languages_known->save();
+
+             }else{
+                 
+                 $update_languages_known = new SurveyorAdditionalInfo();
+                 $update_languages_known->surveyor_id = Auth::user()->user_id;
+                 $update_languages_known->languages =  $language_ids;
+                 $update_languages_known->save();
+             }
+             
+
+             /*************Language known Surveyor ends*****************************/
              /***************************Address Table Start************************/
              $address_table_store=Address::where('address_id',$request->get('address_id'))->first();
              $address_table_store->address=Crypt::encryptString($request->get('address'));

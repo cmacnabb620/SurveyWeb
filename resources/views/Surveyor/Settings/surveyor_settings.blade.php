@@ -51,7 +51,7 @@ overflow: hidden !important;
             </div>
           </div>
           <div class="box-content">
-          <!--   <form class="form-horizontal" method="POST" id="myform" files= 'true'> -->
+            <!--   <form class="form-horizontal" method="POST" id="myform" files= 'true'> -->
             <form class="form-horizontal" action="{{url('surveyor/update_user')}}" method="POST" id="myform" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <input type="hidden" name="user_type" value="{{$surveyor_profile->user_type_id}}">
@@ -70,7 +70,7 @@ overflow: hidden !important;
                   @endif
                 </div>
                 <div class="span3">
-                <input type="file" name="profile_pic">
+                  <input type="file" name="profile_pic">
                 </div>
                 
               </div>
@@ -94,11 +94,31 @@ overflow: hidden !important;
                       </div>
                     </div>
                     <div class="control-group">
-                      <label class="control-label" for="name"><b>Email<span style="color:red">*</span></b></label>
+                      <label class="control-label" for="email"><b>Email<span style="color:red">*</span></b></label>
                       <div class="controls">
                         <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" value="{{\Crypt::decryptString($surveyor_profile->email)}}" maxlength="70" />
                       </div>
                     </div>
+                    <div class="control-group">
+                 <label class="control-label" for="projectname"><b>Language<span style="color:red">*</span></b></label>
+                  <div class="controls">
+                    <select data-placeholder="Select Language" multiple name="language_id[]" id="language_id" data-rel="chosen">
+                      @if(isset($language) && count($language) > 0)
+                      @foreach ($language as $lang)
+                       @if($languages_id != NULL) 
+                       @if(in_array($lang->language_id, $languages_id) )
+                        <option value="{{ $lang->language_id }}" selected="true">{{ $lang->language }}</option>
+                        @else
+                        <option value="{{ $lang->language_id }}">{{$lang->language}}</option>
+                        @endif
+                        @else
+                         <option value="{{ $lang->language_id }}">{{$lang->language}}</option>
+                        @endif  
+                       @endforeach 
+                      @endif
+                    </select>
+                  </div>
+                </div>
                     <div class="control-group">
                       <label class="control-label" for="name"><b>Phone Number<span style="color:red">*</span></b></label>
                       <div class="controls">
@@ -145,7 +165,7 @@ overflow: hidden !important;
                   <div class="row-fluid span12">
                     <div class="span3 offset5">
                       <button type="submit"  class="btn btn-danger">Update</button>
-                     <!--  <button type="button"  class="btn btn-success" onclick="javascript:return managerValidationCheck();" >Update</button> -->
+                      <!--  <button type="button"  class="btn btn-success" onclick="javascript:return managerValidationCheck();" >Update</button> -->
                     </div>
                   </div>
                 </fieldset>
@@ -264,104 +284,101 @@ function populateCountries(countryElementId, stateElementId) {
   } );
   </script>
   <script>
-   function passwordUpdationValidationCheck()
-     {
-      var old_pwd =  $('#old_pwd').val();
-      var new_password =  $('#new_password').val();
-      var re_enter_password =  $('#re_enter_password').val();
-      if($.trim(old_pwd)=='')
-      {
-         toastr.options.timeOut = 1500; // 1.5s
-         toastr.error('Please Enter Old paswword.');
-         return false;  
-      }else if($.trim(old_pwd).length<6){
-         toastr.options.timeOut = 1500; // 1.5s
-         toastr.error('Please enter Old Password more than 6 characters.');
-         return false;  
-      }
-
-      if($.trim(new_password)=='')
-      {
-         toastr.options.timeOut = 1500; // 1.5s
-         toastr.error('Please Enter paswword.');
-         return false;  
-      }
-      else if($.trim(new_password).length<6)
-      {
-         toastr.options.timeOut = 1500; // 1.5s
-         toastr.error('Please enter Password more than 6 characters.');
-         return false;  
-      }else if($.trim(re_enter_password)==''){
-         toastr.options.timeOut = 1500; // 1.5s
-         toastr.error('Please Enter Confirm paswword.');
-         return false;  
-      }else if($.trim(re_enter_password).length<6){
-         toastr.options.timeOut = 1500; // 1.5s
-         toastr.error('Please enter Confirm Password more than 6 characters.');
-         return false;  
-      }else if($.trim(re_enter_password) != $.trim(new_password)){
-         toastr.options.timeOut = 1500; // 1.5s
-         toastr.error('Please enter Confirm-password same as new password.');
-         return false;  
-      }
-      else
-      {
-         passwordUpdate();
-      }
-     }
-
-     //post data
-      function passwordUpdate()
-      {
-         var url  = "{{url('surveyor/update_manager_password')}}";
-         var old_pwd= $('#old_pwd').val();
-         var new_password= $('#new_password').val();
-         var re_password= $('#re_enter_password').val();
-         var user_id= $('#user_id').val();
-         var csrf  = $('#_token').val();
-        $.ajax({
-              url: url,
-              type: 'POST',
-              data:{
-               old_pwd:old_pwd, 
-               new_password:new_password,
-               re_password:re_password,
-               user_id:user_id,
-              _token: '{{csrf_token()}}'
-              },
-             beforeSend: function()
-             {
-               showProcessingOverlay();
-             },
-             success: function(res)   
-             {
-              console.log(res);
-              hideProcessingOverlay();
-              if(res.status=="200")
-              {
-                toastr.options.timeOut = 1500; // 1.5s
-                toastr.success(res.success);
-                document.getElementById('my-password').reset();
-              }
-             },
-             error: function (errormessage) {
-                hideProcessingOverlay();
-                toastr.options.timeOut = 1500; // 1.5s
-                toastr.error('Sorry, Old password does not match');
-                return false; 
-            }
-        }); 
-      }
+  function passwordUpdationValidationCheck()
+  {
+  var old_pwd =  $('#old_pwd').val();
+  var new_password =  $('#new_password').val();
+  var re_enter_password =  $('#re_enter_password').val();
+  if($.trim(old_pwd)=='')
+  {
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Please Enter Old paswword.');
+  return false;
+  }else if($.trim(old_pwd).length<6){
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Please enter Old Password more than 6 characters.');
+  return false;
+  }
+  if($.trim(new_password)=='')
+  {
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Please Enter paswword.');
+  return false;
+  }
+  else if($.trim(new_password).length<6)
+  {
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Please enter Password more than 6 characters.');
+  return false;
+  }else if($.trim(re_enter_password)==''){
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Please Enter Confirm paswword.');
+  return false;
+  }else if($.trim(re_enter_password).length<6){
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Please enter Confirm Password more than 6 characters.');
+  return false;
+  }else if($.trim(re_enter_password) != $.trim(new_password)){
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Please enter Confirm-password same as new password.');
+  return false;
+  }
+  else
+  {
+  passwordUpdate();
+  }
+  }
+  //post data
+  function passwordUpdate()
+  {
+  var url  = "{{url('surveyor/update_manager_password')}}";
+  var old_pwd= $('#old_pwd').val();
+  var new_password= $('#new_password').val();
+  var re_password= $('#re_enter_password').val();
+  var user_id= $('#user_id').val();
+  var csrf  = $('#_token').val();
+  $.ajax({
+  url: url,
+  type: 'POST',
+  data:{
+  old_pwd:old_pwd,
+  new_password:new_password,
+  re_password:re_password,
+  user_id:user_id,
+  _token: '{{csrf_token()}}'
+  },
+  beforeSend: function()
+  {
+  showProcessingOverlay();
+  },
+  success: function(res)
+  {
+  console.log(res);
+  hideProcessingOverlay();
+  if(res.status=="200")
+  {
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.success(res.success);
+  document.getElementById('my-password').reset();
+  }
+  },
+  error: function (errormessage) {
+  hideProcessingOverlay();
+  toastr.options.timeOut = 1500; // 1.5s
+  toastr.error('Sorry, Old password does not match');
+  return false;
+  }
+  });
+  }
   </script>
   @endsection
-  @section('page-script')
+  <!-- @section('page-script')
   <script type="text/javascript">
   @if(Session::has('success'))
-      toastr.success("{{ Session::get('success') }}");
+  toastr.success("{{ Session::get('success') }}");
   @endif
-
   @if(Session::has('error'))
-      toastr.error("{{ Session::get('error') }}");
+  toastr.error("{{ Session::get('error') }}");
   @endif
-</script>
-  @endsection
+  </script>
+  @endsection -->

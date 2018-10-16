@@ -80,7 +80,12 @@ Route::group(['namespace' => 'SuperAdmin','prefix' => 'admin', 'middleware' => '
     Route::get('/delete_project/{project_id}','ProjectManagement\AdminManageProjectController@deleteProject');
     Route::get('/make_post/{project_id}','ProjectManagement\AdminManageProjectController@makePost');
     /*Route::get('/remove_post/{project_id}','ProjectManagement\AdminManageProjectController@removePost');*/
+        
     /*Admin Manage Project routes End*/
+
+    /*Project Settings start*/
+    Route::get('/project_settings','ProjectManagement\ProjectSettingsController@index');
+    /*Project Settings end*/
 
     /*Frequency type routes starts*/
     Route::get('/manage_frequency_types','ProjectManagement\AdminFrequencyTypeController@index');

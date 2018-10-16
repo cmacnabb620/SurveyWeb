@@ -70,10 +70,9 @@ class ModalController extends Controller {
     }
     public function parseImport(CsvImportRequest $request)
     {
-        $path = $request->file('csv_file')->getRealPath();
-        $data = array_map('str_getcsv', file($path));
-
-        $csv_data_file = CsvData::create([
+       $path = $request->file('csv_file')->getRealPath();
+       $data = array_map('str_getcsv', file($path));
+       $csv_data_file = CsvData::create([
         'csv_filename' => $request->file('csv_file')->getClientOriginalName(),
         'csv_header' => $request->has('header'),
         'csv_data' => json_encode($data)

@@ -46,9 +46,9 @@ Manage Specialty
 					<thead>
 						<tr>
 							<th>Sr No. <a><i class="icon-sort"></i></a> </th>
-							<th>Specialty Name<a><i class="icon-sort"></i></a> </th>
-							<th>Surveys Required<a><i class="icon-sort"></i></a> </th>
-							<th>Status<a><i class="icon-sort"></i></a> </th>
+							<th>Specialty Name <a><i class="icon-sort"></i></a> </th>
+							<th>Surveys Required <a><i class="icon-sort"></i></a> </th>
+							<th>Status <a><i class="icon-sort"></i></a> </th>
 							<th>Actions</th>
 						</tr>
 					</thead>

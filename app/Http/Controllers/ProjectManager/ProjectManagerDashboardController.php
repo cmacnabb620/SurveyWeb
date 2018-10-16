@@ -18,7 +18,7 @@ use Vinkla\Hashids\Facades\Hashids;
 
 class ProjectManagerDashboardController extends Controller {
 
-//Admin Login Form displayed
+
     public function index(){  
 	    if(Auth::check()){ 
 	        return view('ProjectManager.project_manager_dashboard');

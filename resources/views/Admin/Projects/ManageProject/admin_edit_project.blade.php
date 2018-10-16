@@ -110,12 +110,16 @@ Edit Projects
                 <div class="control-group">
                    <label class="control-label" for="projectname">Survey Type</label>
                   <div class="controls">
-                    <select data-placeholder="Select Survey Type" name="survey_type_id" id="survey_type_id" data-rel="chosen">
-                      <option disabled selected>Select Survey Type</option>
+                    <select data-placeholder="Select Survey Type" multiple name="survey_type_id[]" id="survey_type_id" data-rel="chosen">
+                     <!--  <option disabled selected>Select Survey Type</option> -->
                       @if(isset($survey_type) && count($survey_type) > 0)
-                      @foreach ($survey_type as $surveys)
-                      <option value="{{$surveys->survey_type_id}}"  @if ($data['survey_type_id']==$surveys->survey_type_id) selected="selected" @endif>{{$surveys->survey_type}}</option>
-                      @endforeach
+                       @foreach ($survey_type as $surveys)
+                       @if(in_array($surveys->survey_type_id, $survey_type_id))
+                        <option value="{{$surveys->survey_type_id}}" selected="true">{{$surveys->survey_type}}</option>
+                        @else
+                        <option value="{{$surveys->survey_type_id}}">{{$surveys->survey_type}}</option>
+                        @endif
+                       @endforeach 
                       @endif
                     </select>
                     <!-- Add New Survey Modal Starts -->
@@ -126,12 +130,16 @@ Edit Projects
                 <div class="control-group">
                  <label class="control-label" for="projectname">Language</label>
                   <div class="controls">
-                    <select data-placeholder="Select Language" name="language_id" id="language_id" data-rel="chosen">
-                      <option disabled selected>Select Language</option>
+                    <select data-placeholder="Select Language" multiple name="language_id[]" id="language_id" data-rel="chosen">
+                      <!-- <option disabled selected>Select Language</option> -->
                       @if(isset($language) && count($language) > 0)
                       @foreach ($language as $lang)
-                      <option value="{{$lang->language_id}}" @if ($data['language_id']==$lang->language_id) selected="selected" @endif>{{$lang->language}}</option>
-                      @endforeach
+                       @if(in_array($lang->language_id, $language_id))
+                        <option value="{{ $lang->language_id }}" selected="true">{{ $lang->language }}</option>
+                        @else
+                        <option value="{{ $lang->language_id }}">{{$lang->language}}</option>
+                        @endif
+                       @endforeach 
                       @endif
                     </select>
                     <!-- Add New Language Modal Starts -->
@@ -220,12 +228,6 @@ function populateCountries(countryElementId, stateElementId) {
   {
   toastr.options.timeOut = 1500; // 1.5s
   toastr.error('Please Enter Project Name.');
-  return false;
-  }
-  else if(!$.trim(project_name).match(alphaExp))
-  {
-  toastr.options.timeOut = 1500; // 1.5s
-  toastr.error('Please Enter Project Name with characters only.');
   return false;
   }
   else if($.trim(project_name).length<2)

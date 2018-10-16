@@ -50,34 +50,30 @@
 					</li>
 				</ul>	
 			</li>
-			<li>
+			<!-- <li>
 				<a class="dropmenu" href="#"><i class="icon-th-list"></i>
 				<span class="hidden-tablet">&emsp;Manage Projects</span></a>
 				<ul style="display:{{{ (Request::is('admin/manage_frequency_types') || Request::is('admin/edit_frequency_type/*') || Request::is('admin/manage_survey_types')|| Request::is('admin/edit_survey_type/*') || Request::is('admin/manage_language') || Request::is('admin/edit_language/*') || Request::is('admin/manage_dist_type') || Request::is('admin/edit_dist_type/*') || Request::is('admin/manage_client') || Request::is('admin/add_new_client') || Request::is('admin/manage_projects') || Request::is('admin/add_new_project') || Request::is('admin/edit_project') || Request::is('admin/project_info') || Request::is('admin/edit_client/*') ? 'block' : '') }}}">
                     <li class="{{{ (Request::is('admin/manage_frequency_types') || Request::is('admin/edit_frequency_type/*') ? 'active' : '') }}}">
 						<a class="submenu" href="{{url('admin/manage_frequency_types')}}">
-						<!-- <a class="submenu" href="#"> -->
 							<i class="icon-file-alt"></i>
 							<span class="hidden-tablet">&nbsp;Frequency Types</span>
 						</a>
 					</li>
 					<li class="{{{ (Request::is('admin/manage_survey_types') || Request::is('admin/edit_survey_type/*') ? 'active' : '') }}}">
 						<a class="submenu" href="{{url('admin/manage_survey_types')}}">
-						<!-- <a class="submenu" href="#"> -->
 							<i class="icon-file-alt"></i>
 							<span class="hidden-tablet">&nbsp;Survey Types</span>
 						</a>
 					</li>
 					<li class="{{{ (Request::is('admin/manage_language') || Request::is('admin/edit_language/*') ? 'active' : '') }}}">
 						<a class="submenu" href="{{ url('admin/manage_language') }}">
-						<!-- <a class="submenu" href="#"> -->
 							<i class="icon-file-alt"></i>
 							<span class="hidden-tablet">&nbsp;Languages</span>
 						</a>
 					</li>
 					<li class="{{{ (Request::is('admin/manage_dist_type') || Request::is('admin/edit_dist_type/*') ? 'active' : '') }}}">
 						<a class="submenu" href="{{url('admin/manage_dist_type')}}">
-						<!-- <a class="submenu" href="#"> -->
 							<i class="icon-file-alt"></i>
 							<span class="hidden-tablet">&nbsp;Distribution Types</span>
 						</a>
@@ -85,7 +81,6 @@
 					
 					<li class="{{{ (Request::is('admin/manage_client') || Request::is('admin/edit_client/*')|| Request::is('admin/add_new_client') ? 'active' : '') }}}">
 						<a class="submenu" href="{{ url('admin/manage_client') }}">
-						<!-- <a class="submenu" href="#"> -->
 							<i class="icon-file-alt"></i>
 							<span class="hidden-tablet">&nbsp;All Clients</span>
 						</a>
@@ -94,6 +89,27 @@
 						<a class="submenu" href="{{url('admin/manage_projects')}}">
 							<i class="icon-file-alt"></i>
 							<span class="hidden-tablet">&nbsp;Projects List</span>
+						</a>
+					</li>
+				</ul>	
+			</li> -->
+			<li>
+				<a class="dropmenu" href="#"><i class="icon-th-list"></i>
+				<span class="hidden-tablet">&emsp;Manage Projects</span></a>
+				<ul style="display:{{{ (Request::is('admin/manage_frequency_types') || Request::is('admin/edit_frequency_type/*') || Request::is('admin/manage_survey_types')|| Request::is('admin/edit_survey_type/*') || Request::is('admin/manage_language') || Request::is('admin/edit_language/*') || Request::is('admin/manage_dist_type') || Request::is('admin/edit_dist_type/*') || Request::is('admin/manage_client') || Request::is('admin/add_new_client') || Request::is('admin/manage_projects') || Request::is('admin/add_new_project') || Request::is('admin/edit_project/*') || Request::is('admin/project_info/*') || Request::is('admin/edit_client/*') ? 'block' : '') }}}">
+					
+					<li class="{{{ (Request::is('admin/manage_projects') || Request::is('admin/add_new_project')|| Request::is('admin/edit_project/*')|| Request::is('admin/project_info/*') ? 'active' : '') }}}">
+						<a class="submenu" href="{{url('admin/manage_projects')}}">
+							<i class="icon-file-alt"></i>
+							<span class="hidden-tablet">&nbsp;Projects List</span>
+						</a>
+					</li>
+
+					<li class="{{{ (Request::is('admin/manage_frequency_types') || Request::is('admin/edit_frequency_type/*') || Request::is('admin/manage_survey_types')|| Request::is('admin/edit_survey_type/*') || Request::is('admin/manage_language') || Request::is('admin/edit_language/*') || Request::is('admin/manage_dist_type') || Request::is('admin/edit_dist_type/*')|| Request::is('admin/manage_client') || Request::is('admin/add_new_client')|| Request::is('admin/edit_client/*') || Request::is('admin/project_settings') ? 'active' : '') }}}">
+						<a class="submenu" href="{{ url('admin/project_settings') }}">
+						<!-- <a class="submenu" href="#"> -->
+							<i class="icon-file-alt"></i>
+							<span class="hidden-tablet">&nbsp;Project Settings</span>
 						</a>
 					</li>
 				</ul>	

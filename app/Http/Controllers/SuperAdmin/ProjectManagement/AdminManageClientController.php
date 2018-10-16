@@ -78,6 +78,14 @@ class AdminManageClientController extends Controller {
 			$new_client->address_id=$new_client_address->address_id;
 			$new_client->last_update=$current_time->toDateTimeString();
 			$new_client->save();
+
+			$new_contact = new Contact();
+			$new_contact->first_name = Crypt::encryptString($request->get('client_name'));	  
+			$new_contact->email      = Crypt::encryptString($request->get('client_email'));	  
+			$new_contact->phone		 = Crypt::encryptString($request->get('phone'));
+			$new_contact->client_id  = $new_client->client_id;
+			$new_contact->address_id = $new_client_address->address_id;
+			$new_contact->save();
 			return 'client saved success';
 
 		}
@@ -88,8 +96,10 @@ class AdminManageClientController extends Controller {
     	if(count($client_id) == 0){
             return redirect()->to('admin/page-not-found');
         }else{
-        	$client_record= Client::join('address as addrs', 'addrs.address_id', '=', 'client.address_id')
-        	       ->where('client_id',$client_id)
+
+        	$client_record = Client::join('address as addrs', 'addrs.address_id', '=', 'client.address_id')
+        		   ->join('contact', 'contact.address_id', '=', 'client.address_id')
+        	       ->where('client.client_id',$client_id)
                    ->select('*')
                    ->first();
             // dd($client_record);       
@@ -100,6 +110,7 @@ class AdminManageClientController extends Controller {
     public function updateClient(Request $request){
     	 $rules = array(
 				     'client_name' => 'required',
+				     'client_email' => 'required',
 				     'org_abbrev' => 'required',
 				     'client_type' => 'required',
 			       	 'address_1' => 'required', 
@@ -111,7 +122,8 @@ class AdminManageClientController extends Controller {
 			       	 );
         $validator = Validator::make($request->all(), $rules);
 		if ($validator->fails()) {
-			return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400);
+			return "hai";
+			/*return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400);*/
 		} else{
 			$current_time = Carbon::now();
 			$edit_client=Client::where('client_id',$request->get('client_id'))->first();
@@ -131,13 +143,19 @@ class AdminManageClientController extends Controller {
 			$client_address->phone=Crypt::encryptString($request->get('phone'));
 			$client_address->last_update=$current_time->toDateTimeString();
 			$client_address->save();
-
+			
+			$update_contact = Contact::where('contact_id',$request->contact_id)->first();
+			$update_contact->first_name = Crypt::encryptString($request->get('client_name'));	  
+			$update_contact->email      = Crypt::encryptString($request->get('client_email'));	  
+			$update_contact->phone		 = Crypt::encryptString($request->get('phone'));
+			$update_contact->save();
 			return 'client updated success';
 
 		}
     }
 
     public function deleteClient($clientid){
+    	
     	$client_id= Hashids::decode($clientid);
         if(empty($client_id)){
             return redirect()->to('admin/page-not-found');
@@ -145,8 +163,15 @@ class AdminManageClientController extends Controller {
         $client_record=Client::where('client_id',$client_id)->first();
         if(!empty($client_record)){
             try {
-            $delete_address_record=Address::where('address_id',$client_record->address_id)->delete();
-            $delete_client_record=Contact::where('contact_id',$client_record->client_id)->delete();
+            $delete_address_record=Address::where('address_id',$client_record->address_id)->first();
+            if(!empty($delete_address_record)){
+            	$delete_address_record->delete();
+            }
+            $delete_contact_record=Contact::where('contact_id',$client_record->client_id)->delete();
+            if(!empty($delete_contact_record)){
+            	$delete_contact_record->delete();
+            }
+            $delete_client_record=Client::where('client_id',$client_id)->delete();
             return redirect()->back()->with('message', 'Client Deleted Successfully');
             }catch (Exception $e) {
              //return redirect()->to('/admin/project_managers')->with('error', 'Somethig Went Wrong');

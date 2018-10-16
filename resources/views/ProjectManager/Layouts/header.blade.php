@@ -1,12 +1,16 @@
 <div class="navbar">
-		<div class="navbar-inner">
-			<div class="container-fluid">
+		<div class="navbar-inner padding-0">
+			<div class="container-fluid padding-0">
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="#"><span>ProjectManager</span></a>
+
+				<div class="logo-admin pull-left"><img src="{{ asset('crossroads/images/logo.png')}}"></div>
+				
+
+				<!-- <a class="brand" href="#"><span>ProjectManager</span></a> -->
 								
 				<!-- start: Header Menu -->
 				<div class="nav-no-collapse header-nav">

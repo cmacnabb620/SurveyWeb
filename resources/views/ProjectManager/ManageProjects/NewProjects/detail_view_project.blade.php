@@ -11,13 +11,25 @@ Project Information
 			<i class="icon-angle-right"></i>
 			<li><a href="{{ url('project_manager/new_projects') }}">New Projects</a></li>
 			<i class="icon-angle-right"></i>
-			<li><a href="#">Project Info</a></li>
+			<li><a href="#">Project and Client Info</a></li>
 		</li>
 	</ul>
+	<div class="span6 offset3">
+		<div class="span5">
+			<label><b>Linked Project Manager:</b></label>
+		</div>
+		<div class="span6">
+			<div class="controls">
+				<select data-placeholder="Project Manager" id="projectmanager" name="projectmanager">
+		            <option selected="selected">{{$data['project_manager_name']}}</option>
+		        </select>    
+			</div>
+		</div>
+	</div>
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
-				<h2><i class="halflings-icon white user"></i>&ensp;Project Information</h2>
+				<h2><i class="halflings-icon white user"></i>&ensp;Project and Client Information</h2>
 				<div class="box-icon">
 					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 				</div>
@@ -30,11 +42,19 @@ Project Information
 							<span><b>Project Name:&ensp;</b>{{$data['project_name']}}</span>
 						</div>
 						<div class="control-group">
-							<span><b>Language:&ensp;</b>{{$data['project_language']}}</span>
+							<span><b>Language:&ensp;</b>
+							@if(isset($languages) && count($languages) > 0)
+                            @foreach ($languages as $lang)
+            				@if(in_array($lang->language_id, $survey_type_ids))
+	                        {{ $lang->language }},
+	                        @endif
+	                        @endforeach
+	                        @endif
+							</span>
 						</div>
 						
 						<div class="control-group">
-							<span><b>Posted On:&ensp;</b>{{$data['posted']}}</span>
+							<span><b>Admin Posted On:&ensp;</b>{{$data['admin_posted']}}</span>
 						</div>
 						<div class="control-group">
 							<span><b>Status:&ensp;</b>{{$data['project_status']}}</span>
@@ -44,12 +64,18 @@ Project Information
 						</div>
 						
 						<div class="control-group">
-							<span><b>Survey Type:&ensp;</b>{{$data['survey_type']}}</span>
+							<span><b>Survey Type:&ensp;</b>
+							@if(isset($survey_types) && count($survey_types) > 0)
+                            @foreach ($survey_types as $surveys)
+            				@if(in_array($surveys->survey_type_id, $survey_type_ids))
+	                        {{ $surveys->survey_type }},
+	                        @endif
+	                        @endforeach
+	                        @endif
+							</span>
 						</div>
 					</div>
 					<div class="span4">
-						
-						
 						<div class="control-group">
 							<span><b>Client Name:&ensp;</b>{{$data['client_name']}}</span>
 						</div>
@@ -87,35 +113,27 @@ Project Information
 						<div class="control-group">
 							<span><b>Pending Surveys:&ensp;</b>0</span>
 						</div>
+						<div class="control-group">
+            				<span><b>Project Duration:&ensp;</b>{{$data['weeks_count']}}</span>
+            			</div>
+            			<div class="control-group">
+            				<span><b>Project Start Date:&ensp;</b>{{$data['start_date']}}</span>
+            			</div>
+            			<div class="control-group">
+            				<span><b>Project End Date:&ensp;</b>{{$data['end_date']}}</span>
+            			</div>
 					</div>
 				</div>
 				
 			</div>
 		</div>
 	</div>
-	<div class="span6 offset3">
-		<div class="span4">
-			<label><b>Link Project Manager:</b></label>
-		</div>
-		<div class="span6">
-			<div class="controls">
-				<select data-placeholder="Project Manager" id="projectmanager" name="projectmanager">
-		            <option selected="selected">{{$data['project_manager_name']}}</option>
-		        </select>    
-			</div>
-		</div>
-	</div>
-	<div class="span6 offset3">
-		<div class="span4">
-			<label><b>Upload File:</b></label>
-		</div>
-		<div class="span6">
-			<div class="controls">
-				 <input type="file" name="file_upload">   
-			</div>
-		</div>
-		
-	</div>
+	<div class="row-fluid padding10">
+        <div class="span4 offset4 center">
+          <button type="button" onclick="goBack()" class="btn btn-importand">Go Back</button>				
+        </div>
+      </div>
+	
 	<!-- <div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
@@ -165,4 +183,9 @@ Project Information
 		</div>
 	</div> -->
 </div>
+<script type="text/javascript">
+	function goBack(){
+   window.location = "{{url('project_manager/new_projects')}}";
+}
+</script>
 @endsection

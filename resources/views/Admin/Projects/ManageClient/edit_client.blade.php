@@ -13,6 +13,8 @@ Edit New Client
       <i class="icon-home"></i>
       <a href="{{url('admin/dashboard')}}">Dashboard</a>
       <i class="icon-angle-right"></i>
+      <li><a href="{{ url('admin/project_settings') }}">Project Settings</a></li>
+      <i class="icon-angle-right"></i>
       <li><a href="{{ url('admin/manage_client') }}">Manage Clients</a></li>
     </li>
     <i class="icon-angle-right"></i>
@@ -31,16 +33,23 @@ Edit New Client
         </div>
       </div>
       <div class="box-content">
-       <!--  <form class="form-horizontal" action="{{ url('admin/add_new_client') }}" method="POST" id="addNewClient"> -->
+        <!-- <form class="form-horizontal" action="{{url('admin/update_client')}}" method="POST" id="addNewClient"> -->
         <form class="form-horizontal" id="addNewClient">
           <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}">
           <input type="hidden" id="client_id" name="client_id" value="{{$client_record->client_id}}">
+          <input type="hidden" id="contact_id" name="contact_id" value="{{$client_record->contact_id}}">
           <fieldset>
             <div class="span6">
               <div class="control-group">
                 <label class="control-label" for="client">Client Name:</label>
                 <div class="controls">
                   <input type="text" class="form-control" id="client_name" name="client_name" placeholder="Enter Client Name" value="{{(\Crypt::decryptString($client_record->name))}}" maxlength="50">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="email">Client Email:</label>
+                <div class="controls">
+                  <input type="email" class="form-control" id="client_email" name="client_email" placeholder="Enter Client Email" value="{{(\Crypt::decryptString($client_record->email))}}" maxlength="50">
                 </div>
               </div>
               <div class="control-group">
@@ -176,7 +185,9 @@ function clientDetailsCheck()
 {
 var alphaExp            =  /^[a-zA-Z]+$/;
 var mobile_filter       =  /^[0-9]*$/;
+var email_filter        =  /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
 var client_name         =  $('#client_name').val();
+var client_email        =  $('#client_email').val();
 var org_abbrev          =  $('#org_abbrev').val();
 var client_type         =  $('#client_type').val();
 var address_1           =  $('#address_1').val();
@@ -191,18 +202,25 @@ toastr.options.timeOut = 1500; // 1.5s
 toastr.error('Please Enter Client Name.');
 return false;
 }
-else if(!$.trim(client_name).match(alphaExp))
-{
-toastr.options.timeOut = 1500; // 1.5s
-toastr.error('Please Enter Client Name with characters only.');
-return false;
-}
 else if($.trim(client_name).length<2)
 {
 toastr.options.timeOut = 1500; // 1.5s
 toastr.error('Please Enter Client Name more than 2 characters.');
 return false;
-}else if($.trim(org_abbrev)==''){
+}
+else if($.trim(client_email)=='')
+{
+toastr.options.timeOut = 1500; // 1.5s
+toastr.error('Please Enter Client Email.');
+return false;
+}
+else if(!$.trim(client_email).match(email_filter))
+{
+toastr.options.timeOut = 1500; // 1.5s
+toastr.error('Please Enter Client Email with Correct-Format.');
+return false;
+}
+else if($.trim(org_abbrev)==''){
 toastr.options.timeOut = 1500; // 1.5s
 toastr.error('Please Enter Organization Abbrevation.');
 return false;
@@ -290,7 +308,8 @@ toastr.options.timeOut = 1500; // 1.5s
 toastr.success('Client Updates Successfully.');
 //location.reload();
 },
-error: function (errormessage) {
+error: function (errormessage) 
+{
   hideProcessingOverlay();
   toastr.options.timeOut = 1500; // 1.5s
   toastr.error('All fields are required');

@@ -134,6 +134,7 @@ Add Project Manager
     </div>
   </div>
 </div>
+
 <script>
 function isNumberKey(evt){
 var charCode = (evt.which) ? evt.which : event.keyCode
@@ -184,9 +185,21 @@ function populateCountries(countryElementId, stateElementId) {
   </script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script type="text/javascript">
+   $(document).ready(function () {
+      $('#date').datepicker({
+          format: "mm/dd/yyyy",
+          autoclose: true,
+          changeMonth: true,
+          changeYear: true,
+          yearRange: "-100:+0",
+          maxDate: new Date,
+      });
+  }); 
+</script>
+  <!-- <script type="text/javascript">
   $( function() {
   $("#date").datepicker({
-  /*dateFormat: "mm-dd-yy",*/
+  // dateFormat: "mm-dd-yy",
   changeMonth: true,
   changeYear: true,
   //showButtonPanel: true,
@@ -197,14 +210,9 @@ function populateCountries(countryElementId, stateElementId) {
   $('.ui-datepicker').css('z-index', 99999999999999);
   }, 0);
   },
-  }).on('change', function() {
-  if($('#date').valid()){
-  $('#date').removeClass('errRed');
-  }
-  // triggers the validation test on change
+  })
   });
-  } );
-  </script>
+  </script> -->
   <!-- validation code start -->
   <script>
   function managerValidationCheck()

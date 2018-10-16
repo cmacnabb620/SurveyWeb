@@ -36,7 +36,15 @@ label{
             				<span><b>Project Name:&ensp;</b>{{$data['project_name']}}</span>
             			</div>
             			<div class="control-group">
-            				<span><b>Language:&ensp;</b>{{$data['project_language']}}</span>
+            				<span><b>Languages:&ensp;</b>
+            				@if(isset($languages) && count($languages) > 0)
+                            @foreach ($languages as $lang)
+            				@if(in_array($lang->language_id, $survey_type_ids))
+	                        {{ $lang->language }},
+	                        @endif
+	                        @endforeach
+	                        @endif
+            				</span>
             			</div>
             			
             			<div class="control-group">
@@ -51,7 +59,15 @@ label{
             			</div>
             			
             			<div class="control-group">
-            				<span><b>Survey Type:&ensp;</b>{{$data['survey_type']}}</span>
+            				<span><b>Survey Types:&ensp;</b>
+            				@if(isset($survey_types) && count($survey_types) > 0)
+                            @foreach ($survey_types as $surveys)
+            				@if(in_array($surveys->survey_type_id, $survey_type_ids))
+	                        {{ $surveys->survey_type }},
+	                        @endif
+	                        @endforeach
+	                        @endif
+	                        </span>
             			</div>
             		</div>	
             		<div class="span4">
@@ -99,6 +115,7 @@ label{
             			<div class="control-group">
             				<span><b>Pending Surveys:&ensp;</b>0</span>
             			</div>
+            			
             		</div>
             	</div>
 			</div>

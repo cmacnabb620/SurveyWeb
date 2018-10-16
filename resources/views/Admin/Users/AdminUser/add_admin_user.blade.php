@@ -173,6 +173,18 @@ function populateCountries(countryElementId, stateElementId) {
   </script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script type="text/javascript">
+   $(document).ready(function () {
+      $('#date').datepicker({
+          format: "mm/dd/yyyy",
+          autoclose: true,
+          changeMonth: true,
+          changeYear: true,
+          yearRange: "-100:+0",
+          maxDate: new Date,
+      });
+  }); 
+  </script>
+ <!--  <script type="text/javascript">
   $( function() {
   $("#date").datepicker({
   /*dateFormat: "mm-dd-yy",*/
@@ -193,7 +205,7 @@ function populateCountries(countryElementId, stateElementId) {
   // triggers the validation test on change
   });
   } );
-  </script>
+  </script> -->
   <!-- validation code start -->
   <script>
   function managerValidationCheck()
