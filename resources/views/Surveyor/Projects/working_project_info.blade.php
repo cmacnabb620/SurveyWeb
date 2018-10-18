@@ -1,11 +1,18 @@
-@extends('Admin.Layouts.master')
+@extends('Surveyor.Layouts.master')
 @section('page-title')
-Project Information
+Working Projects
 @endsection
 @section('local-style')
-<style>
-label{
-	margin-top: 5px;
+<style type="text/css">
+.survey-head{
+	text-align: center;
+	padding: 10px;
+}
+a {
+	color: white;
+}
+a:hover{
+	color: white;
 }
 </style>
 @endsection
@@ -14,25 +21,11 @@ label{
 	<ul class="breadcrumb">
 		<li>
 			<i class="icon-home"></i>
-			<a href="{{url('admin/dashboard')}}">Dashboard</a> 
+			<li><a href="{{url('surveyor/dashboard')}}">Dashboard</a></li>
 			<i class="icon-angle-right"></i>
-			<li><a href="{{ url('admin/manage_projects') }}">Manage Projects</a></li>
-			<i class="icon-angle-right"></i>
-			<li><a href="#">Project Info</a></li>
+			<li><a href="{{url('surveyor/working_projects')}}">Working Projects</a></li>
 		</li>
 	</ul>
-	<div class="span6 offset3">
-		<div class="span5">
-			<label><b>Linked Project Manager:</b></label>
-		</div>
-		<div class="span6">
-			<div class="controls">
-          		<select data-placeholder="Project Manager" id="projectmanager" name="projectmanager">
-		            <option selected="selected">{{$data['project_manager_name']}}</option>
-          		</select>
-        	</div>
-		</div>
-	</div>
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
@@ -51,7 +44,7 @@ label{
 							<span><b>Language:&ensp;</b>
 								@if(isset($languages) && count($languages) > 0)
 								@foreach ($languages as $lang)
-								@if(in_array($lang->language_id, $language_ids))
+								@if(in_array($lang->language_id, $survey_type_ids))
 								{{ $lang->language }},
 								@endif
 								@endforeach
@@ -61,9 +54,22 @@ label{
 						<div class="control-group">
 							<span><b>No.of Working Surveyors:&ensp;</b>0</span>
 						</div>
+						<div class="control-group">
+							<span><b>Survey Type:&ensp;</b>
+								@if(isset($survey_types) && count($survey_types) > 0)
+								@foreach ($survey_types as $surveys)
+								@if(in_array($surveys->survey_type_id, $survey_type_ids))
+								{{ $surveys->survey_type }},
+								@endif
+								@endforeach
+								@endif
+							</span>
+						</div>
 					</div>
 					<div class="span4">
-					
+						<div class="control-group">
+							<span><b>Admin Posted On:&ensp;</b>{{$data['admin_posted']}}</span>
+						</div>
 						<div class="control-group">
 							<span><b>Status:&ensp;</b>{{$data['project_status']}}</span>
 						</div>
@@ -79,15 +85,13 @@ label{
 							<span><b>Report Freuency:&ensp;</b>{{$data['project_report_frequency']}}</span>
 						</div>
 						<div class="control-group">
-							<span><b>Survey Type:&ensp;</b>
-								@if(isset($survey_types) && count($survey_types) > 0)
-								@foreach ($survey_types as $surveys)
-								@if(in_array($surveys->survey_type_id, $survey_type_ids))
-								{{ $surveys->survey_type }},
-								@endif
-								@endforeach
-								@endif
-							</span>
+							<span><b>Project End Date:&ensp;</b>{{$data['end_date']}}</span>
+						</div>
+						<div class="control-group">
+							<span><b>Project Start Date:&ensp;</b>{{$data['start_date']}}</span>
+						</div>
+						<div class="control-group">
+							<span><b>Project Duration:&ensp;</b>{{$data['weeks_count']}}</span>
 						</div>
 					</div>
 				</div>
@@ -138,6 +142,61 @@ label{
 			</div>
 		</div>
 	</div>
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-header" data-original-title>
+				<h2><i class="halflings-icon th-list white"></i>&ensp;Project Status</h2>
+				<div class="box-icon">
+					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+				</div>
+			</div>
+			<div class="box-content">
+				<div class="span12">
+					<div class="span3 statbox pinklight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>Completed Surveys</h2>
+							<h1>4</h1>
+						</div>
+						</a>
+					</div>
+					<div class="span3 statbox orangeLight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>No Answer Surveys</h2>
+							<h1>3</h1>
+						</div>
+						</a>
+					</div>
+					<div class="span3 statbox blueLight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>Refused Surveys</h2>
+							<h1>2</h1>
+						</div>
+						</a>
+					</div>
+					<div class="span3 statbox redLight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>Do Not Call Surveys</h2>
+							<h1>4</h1>
+						</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid padding10">
+		<div class="span4 offset4 center">
+			<button type="button" onclick="goBack()" class="btn btn-importand">Go Back</button>
+		</div>
+	</div>
 </div>
-	
-@endsection		
+<script type="text/javascript">
+	function goBack(){
+window.location = "{{url('surveyor/working_projects')}}";
+}
+</script>
+@endsection

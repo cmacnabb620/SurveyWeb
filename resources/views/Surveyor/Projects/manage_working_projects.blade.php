@@ -19,7 +19,7 @@ Working Projects
 	<div class="row-fluid sortable">		
 		<div class="box span12">
 			<div class="box-header" data-original-title>
-				<h2><i class="halflings-icon white user"></i>&ensp;Working Projects</h2>
+				<h2><i class="halflings-icon th-list white"></i>&ensp;Working Projects</h2>
 				<div class="box-icon">
 				<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 				</div>
@@ -44,14 +44,16 @@ Working Projects
 					<tr>                    
 						<td>{{$i++}}</td>
 						<td>{{$project['project_name']}}</td>
-						<td>{{$project['start_date']}} to {{$project['end_date']}}</td>
+						<td><b>({{$project['start_date']}})</b> TO <b>({{$project['end_date']}})</b></td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
-						<td class="center"> 
-							<a class="btn btn-success" href="{{url('project_manager/project_info/'.Hashids::encode($project['project_id']))}}">
+						<td class="center">
+							<abbr title="Project Information"> 
+							<a class="btn btn-success" href="{{url('surveyor/working_project_info/'.Hashids::encode($project['project_id']))}}">
 								<i class="halflings-icon white zoom-in"></i>
 							</a>
+							</abbr>
 						</td>
 					</tr>
 				@endforeach	
@@ -61,4 +63,5 @@ Working Projects
 			</div>
 		</div>
 	</div>
+</div>	
 @endsection  

@@ -417,7 +417,7 @@
 
                       <p>Your Project <b>{{ucfirst($project_name)}}</b> successfully created with us. 
 
-                      Use the button below to submit your roster information.</p>
+                      Use the button below to submit your roster information for Week One.</p>
                       <!-- Action -->
                       <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0">
                         <tr>

@@ -1,23 +1,21 @@
-@extends('ProjectManager.Layouts.master')
+@extends('QualityUser.Layouts.master')
 @section('page-title')
-Completed Projects
+Projects Reviews
 @endsection
 @section('content')
 <div id="content" class="span10">
 	<ul class="breadcrumb">
 		<li>
 			<i class="icon-home"></i>
-			<a href="{{url('project_manager/dashboard')}}">Dashboard</a> 
+			<a href="index.html">Home</a>
+			<i class="icon-angle-right"></i>
 		</li>
-		<i class="icon-angle-right"></i>
-		<li><a href="#">Manage Projects</a></li>
-		<i class="icon-angle-right"></i>
-		<li><a href="{{url('project_manager/completed_projects')}}">Completed Projects</a></li>
+		<li><a href="{{url('quality_user/projects_reviews')}}">Project Reviews</a></li>
 	</ul>
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
-				<h2><i class="halflings-icon th-list white"></i>&ensp;Completed Projects</h2>
+				<h2><i class="halflings-icon th-list white"></i>&ensp;Project Reviews</h2>
 				<div class="box-icon">
 					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 				</div>
@@ -28,11 +26,11 @@ Completed Projects
 						<tr>
 							<th>Sr No. <a><i class="icon-sort"></i></a></th>
 							<th>Project Name <a><i class="icon-sort"></i></a></th>
-							<th>Project Duration <a><i class="icon-sort"></i></a></th>
+							<th>Report Frequency <a><i class="icon-sort"></i></a></th>
+							<th>Total Worked Surveyor <a><i class="icon-sort"></i></a></th>
 							<th>Total Surveys <a><i class="icon-sort"></i></a></th>
-							<th>Completed Surveys <a><i class="icon-sort"></i></a></th>
-							<th>Completed Date <a><i class="icon-sort"></i></a></th>
-							<th>Actions</th>
+							<th>QC Review Status <a><i class="icon-sort"></i></a></th>
+							<th class="center">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -42,14 +40,17 @@ Completed Projects
 						<tr>
 							<td>{{$i++}}</td>
 							<td>{{$project['project_name']}}</td>
-							<td><b>({{$project['start_date']}})</b> TO <b>({{$project['end_date']}})</b></td>
+							<td>{{$project['project_report_frequency']}}</td>
 							<td>-</td>
 							<td>-</td>
-							<td>-</td>
+							<td class="center"><span class="label label-important">Not Completed</span></td>
 							<td class="center">
-								<a class="btn btn-success" href="{{url('project_manager/completed_project_info/'.Hashids::encode($project['project_id']))}}">
-									<i class="halflings-icon white zoom-in"></i>
-								</a>
+								<abbr title="Project Information">
+									<a class="btn btn-primary" href="{{url('quality_user/project_review_info/'.Hashids::encode($project['project_id']))}}">
+									Review Project
+										
+									</a>
+								</abbr>
 							</td>
 						</tr>
 						@endforeach
@@ -60,4 +61,4 @@ Completed Projects
 		</div>
 	</div>
 </div>
-@endsection
+@endsection	

@@ -4,12 +4,16 @@ Route::group(['namespace' => 'Surveyor','prefix' => 'surveyor','middleware' => '
 
     Route::group(['middleware' => 'check_surveyor_info'],function(){
         
-        Route::get('/dashboard','SurveyorDashboardController@index');
-        /*Projects Routes starts*/
-        Route::get('/working_projects','ProjectManagement\SurveyorManageProjectController@index');
-        Route::get('/completed_projects','ProjectManagement\SurveyorManageProjectController@completedProjects');
-        Route::get('/working_project_info/{project_id}','ProjectManagement\SurveyorManageProjectController@projectInfo');
-        /*Projects Routes starts*/
+    Route::get('/dashboard','SurveyorDashboardController@index');
+    /*Projects Routes starts*/
+    Route::get('/working_projects','ProjectManagement\SurveyorManageProjectController@workingProjects');
+    Route::get('/working_project_info/{project_id}','ProjectManagement\SurveyorManageProjectController@workingProjectInfo');
+    Route::get('/completed_projects','ProjectManagement\SurveyorManageProjectController@completedProjects');
+    Route::get('/completed_project_info/{project_id}','ProjectManagement\SurveyorManageProjectController@completedProjectInfo');
+    /*Projects Routes starts*/
+        
+
+
     });
 
     /****Surveyor Setting Routes Starts*****/

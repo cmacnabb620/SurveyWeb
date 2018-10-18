@@ -15,7 +15,7 @@ New Projects
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
-				<h2><i class="halflings-icon white user"></i>&ensp;New Projects</h2>
+				<h2><i class="halflings-icon th-list white"></i>&ensp;New Projects</h2>
 				<div class="box-icon">
 					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 				</div>
@@ -29,7 +29,7 @@ New Projects
 							<th>Admin Posted Date <a><i class="icon-sort"></i></a></th>
 							<th>Required Surveys <a><i class="icon-sort"></i></a></th>
 							<th>Project Duration <a><i class="icon-sort"></i></a></th>
-							<th>Status <a><i class="icon-sort"></i></a></th>
+							<th>Project Status <a><i class="icon-sort"></i></a></th>
 							<th class="center">Actions</th>
 						</tr>
 					</thead>
@@ -44,7 +44,7 @@ New Projects
 							<td>-</td>
 							<td>
 								@if(isset($project['start_date']) && !empty($project['start_date']))
-								<b>({{$project['start_date']}})</b> to <b>({{$project['end_date']}})</b>
+								<b>({{$project['start_date']}})</b> TO <b>({{$project['end_date']}})</b>
 								@else
 
 								@if($project['admin_posted_days_cont']>6)
@@ -58,7 +58,7 @@ New Projects
 								@endif
 								@endif
 							</td>
-							<td><span class="label label-success">{{$project['project_status']}}</span></td>
+							<td class="center"><span class="label label-success">{{$project['project_status']}}</span></td>
 							<td class="center">
 								<abbr title="Project Information">
 									<a class="btn btn-success" href="{{url('project_manager/new_project_info/'.Hashids::encode($project['project_id']))}}">

@@ -36,7 +36,7 @@ Manage Providers
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
-				<h2><i class="halflings-icon white user"></i>&ensp;Manage Providers</h2>
+				<h2><i class="halflings-icon th-list white"></i>&ensp;Manage Providers</h2>
 				<div class="box-icon">
 					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 				</div>

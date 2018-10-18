@@ -28,8 +28,8 @@
 						</a>
 					</li>
 					<li>
-						<!-- <a class="submenu" href="{{ url('project_manager/completed_projects') }}"> -->
-						<a class="submenu" href="#">
+						<a class="submenu" href="{{ url('project_manager/completed_projects') }}">
+						<!-- <a class="submenu" href="#"> -->
 							<i class="icon-file-alt"></i>
 							<span class="hidden-tablet">&nbsp;Completed Projects</span>
 						</a>

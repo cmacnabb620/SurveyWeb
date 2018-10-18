@@ -1,19 +1,53 @@
-@extends('ProjectManager.Layouts.master')
+@extends('Surveyor.Layouts.master')
 @section('page-title')
-Project Information
+Completed Project Info
+@endsection
+@section('local-style')
+<style type="text/css">
+.survey-head{
+	text-align: center;
+	padding: 10px;
+}
+a {
+	color: white;
+}
+a:hover{
+	color: white;
+}
+</style>
 @endsection
 @section('content')
 <div id="content" class="span10">
-	<ul class="breadcrumb">
+ <ul class="breadcrumb">
 		<li>
 			<i class="icon-home"></i>
-			<a href="{{url('project_manager/dashboard')}}">Dashboard</a>
+			<li><a href="{{url('surveyor/dashboard')}}">Dashboard</a></li>
 			<i class="icon-angle-right"></i>
-			<li><a href="{{ url('project_manager/active_projects') }}">Active Projects</a></li>
-			<i class="icon-angle-right"></i>
-			<li><a href="#">Project and Client Info</a></li>
+			<li><a href="{{url('surveyor/working_projects')}}">Completed Projects</a></li>
 		</li>
 	</ul>
+	<div class="row-fluid sortable">
+		<div class="span6">
+			<div class="span5">
+				<label class="control-label"><b>Linked Project Manager:</b></label>
+			</div>
+			<div class="span3">
+				<select data-placeholder="Project Manager" id="projectmanager" name="projectmanager">
+					<option selected="selected">{{$data['project_manager_name']}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="span6">
+			<div class="span4">
+				<label class="control-label"><b>Project QC User:</b></label>
+			</div>
+			<div class="span3">
+				<select data-placeholder="Qc User" id="qc_user" name="qc_user">
+					<option selected="selected">QC User 1</option>
+				</select>
+			</div>
+		</div>
+	</div>
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
@@ -32,7 +66,7 @@ Project Information
 							<span><b>Language:&ensp;</b>
 								@if(isset($languages) && count($languages) > 0)
 								@foreach ($languages as $lang)
-								@if(in_array($lang->language_id, $language_ids))
+								@if(in_array($lang->language_id, $survey_type_ids))
 								{{ $lang->language }},
 								@endif
 								@endforeach
@@ -73,10 +107,10 @@ Project Information
 							<span><b>Report Freuency:&ensp;</b>{{$data['project_report_frequency']}}</span>
 						</div>
 						<div class="control-group">
-							<span><b>Project Start Date:&ensp;</b>{{$data['start_date']}}</span>
+							<span><b>Project End Date:&ensp;</b>{{$data['end_date']}}</span>
 						</div>
 						<div class="control-group">
-							<span><b>Project End Date:&ensp;</b>{{$data['end_date']}}</span>
+							<span><b>Project Start Date:&ensp;</b>{{$data['start_date']}}</span>
 						</div>
 						<div class="control-group">
 							<span><b>Project Duration:&ensp;</b>{{$data['weeks_count']}}</span>
@@ -133,85 +167,58 @@ Project Information
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
-				<h2><i class="halflings-icon white user"></i>&ensp;Assignment A</h2>
+				<h2><i class="halflings-icon th-list white"></i>&ensp;Project Status</h2>
 				<div class="box-icon">
 					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
 				</div>
 			</div>
-			<div class="box-content" style="display:block;">
-				<table class="table table-striped table-bordered bootstrap-datatable datatable">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Week No.</th>
-							<th>Duration Of the Week</th>
-							<th>Roster Data Upload</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php $i=1; ?>
-						<?php $j=1; ?>
-						<?php $k=1; ?>
-					 @foreach($wk_dates_week_interval_main as $wk_dates_week_interval)
-						<tr>
-							<td>{{ $i++}}</td>
-							<td>Week {{ $j++ }}</td>
-							<td>
-								(<b>{{date("m-d-Y", strtotime($wk_dates_week_interval['start_date']->toDateString()))}}</b>) - (<b>{{date("m-d-Y", strtotime($wk_dates_week_interval['end_date']->toDateString()))}}</b>)
-							</td>
-                          
-							<td>
-							@if(Carbon::now()->toDateString() > $wk_dates_week_interval['end_date']->toDateString())
-								<abbr title="Week Dates are passed, You can not upload file">
-									<a class="btn btn-danger" attr="{{ $k++ }}" href="#"><i class="halflings-icon upload white"></i></a>
-								</abbr>
-							@else
-							<?php
-							$start_date=date("m-d-Y", strtotime($wk_dates_week_interval['start_date']->toDateString()));
-							$end_date=date("m-d-Y", strtotime($wk_dates_week_interval['end_date']->toDateString()));
-							$exsting_record_check=\DB::table('client_submitted_roster_info')->where('week_start_date',$start_date)->where('week_end_date',$end_date)->count();
-							?>
-
-							<abbr title="Already Uploaded">
-							@if($exsting_record_check == 1)
-							    <a class="btn btn-success" attr="{{ $k++ }}" href="#"><i class="halflings-icon upload white"></i></a>
-							@else
-							<a class="btn btn-primary" href="{{url('project_manager/upload_roster_data/'.Hashids::encode($project['project_id']).'/'.Hashids::encode($project['client_id']).'/'.'week'.$k++.'/'.$start_date.'/'.$end_date)}}"><i class="halflings-icon upload white"></i></a> 
-							@endif	
-							</abbr>
-							@endif
-
-							</td>
-						</tr>
-						@endforeach
-						<!-- @for($i=1;$i<=$data['roster_data_loop_count'];$i++)
-						<tr>
-							<td>{{ $i }}</td>
-							<td>Week {{ $i }}</td>
-							<td>
-								
-							</td>
-							<td>
-								<abbr title="Upload Roster Data">
-									<a class="btn btn-primary" href="{{url('project_manager/upload_roster_data/'.Hashids::encode($project['project_id']).'/'.Hashids::encode($project['client_id']))}}"><i class="halflings-icon upload white"></i></a>
-								</abbr>
-							</td>
-						</tr>
-						@endfor -->
-					</tbody>
-				</table>
+			<div class="box-content">
+				<div class="span12">
+					<div class="span3 statbox pinklight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>Completed Surveys</h2>
+							<h1>4</h1>
+						</div>
+						</a>
+					</div>
+					<div class="span3 statbox orangeLight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>No Answer Surveys</h2>
+							<h1>3</h1>
+						</div>
+						</a>
+					</div>
+					<div class="span3 statbox blueLight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>Refused Surveys</h2>
+							<h1>2</h1>
+						</div>
+						</a>
+					</div>
+					<div class="span3 statbox redLight" onTablet="span6" onDesktop="span3">
+						<a href="#">
+						<div class="survey-head">
+							<h2>Do Not Call Surveys</h2>
+							<h1>4</h1>
+						</div>
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row-fluid padding10">
 		<div class="span4 offset4 center">
-			<button type="button" onclick="goBack()" class="btn btn-importand"><i class="halflings-icon chevron-left white"></i>Go Back</button>
+			<button type="button" onclick="goBack()" class="btn btn-importand">Go Back</button>
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
 	function goBack(){
-window.location = "{{url('project_manager/active_projects')}}";
+   window.location = "{{url('surveyor/completed_projects')}}";
 }
-</script>
-@endsection
+</script>	
+@endsection 	

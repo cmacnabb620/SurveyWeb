@@ -33,7 +33,7 @@ class ManageNewProjectController extends Controller {
 
 
     public function index(){
-         $projects = Project::where('project_manager_id',Auth::user()->user_id)->where('admin_posted', '!=', NULL)->where('project_status', 2 )->get()->all();
+         $projects = Project::where('project_manager_id',Auth::user()->user_id)->where('admin_posted', '!=', NULL)->where('project_status', 1 )->get()->all();
          //dd($projects);
          $data=[];
          if(!empty($projects)){
@@ -148,8 +148,21 @@ class ManageNewProjectController extends Controller {
                  $update_project_date = Project::where('project_id',$request->project_id)->first();
                  $update_project_date->start_date = date("Y/m/d",strtotime($request->start_date));
                  $update_project_date->end_date = date("Y/m/d",strtotime($request->end_date));
-                 $update_project_date->project_status = 1 ;
+                 //changing the project status from Prospective to Active
+                 $update_project_date->project_status = 2 ;
                  $update_project_date->save();
+
+            //mail link sent to client for roster data update start
+            $client_record=Client::where('client_id',$update_project_date->client_id)->first();
+            $client_contact=Contact::where('client_id',$update_project_date->client_id)->first();
+            $data = array('client_id'=>Hashids::encode($client_record->client_id),'email'=>Crypt::decryptString($client_contact->email),'client_name'=>Crypt::decryptString($client_record->name),'project_id'=>Hashids::encode($update_project_date->project_id),'project_name' =>$update_project_date->project_name ,"body" => "Invitation to client for upload rosterdata");
+
+            $mail_sent=Mail::send('Email.client_roster_data_load_link', $data, function($message) use ($data){
+              $message->to($data['email'], 'Receiver')
+                        ->subject('Crossroads Group Request For Load Rosterdata');
+                $message->from('muralidharan.bora@gmail.com','Sender');         
+            });
+            //mail link sent to client for roster data update start
 
                 
                 return response()->json(['status' => 'success', 'message' => "Project Dates are Updated"]);

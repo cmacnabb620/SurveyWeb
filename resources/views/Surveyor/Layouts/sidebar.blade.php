@@ -6,14 +6,16 @@
 				<li>
 					<a class="dropmenu" href="#"><i class="icon-edit"></i>
 					<span class="hidden-tablet">&emsp;Manage Projects</span></a>
-					<ul>
+					<ul style="display:{{{ (Request::is('surveyor/working_projects') || Request::is('surveyor/working_project_info/*') || Request::is('surveyor/completed_projects') || Request::is('surveyor/completed_project_info/*') ? 'block' : '') }}}">
+						
 						<li class="{{{ (Request::is('surveyor/working_projects') || Request::is('surveyor/working_project_info/*') ? 'active' : '') }}}">
 							<a class="submenu" href="{{ url('surveyor/working_projects') }}">
 								<i class="icon-file-alt"></i>
 								<span class="hidden-tablet">&nbsp;Working Projects</span>
 							</a>
 						</li>
-						<li>
+						
+						<li class="{{{ (Request::is('surveyor/completed_projects') || Request::is('surveyor/completed_project_info/*') ? 'active' : '') }}}">
 							<a class="submenu" href="{{ url('surveyor/completed_projects') }}">
 								<i class="icon-file-alt"></i>
 								<span class="hidden-tablet">&nbsp;Completed Projects</span>

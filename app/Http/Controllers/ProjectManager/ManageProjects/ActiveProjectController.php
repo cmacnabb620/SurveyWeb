@@ -34,7 +34,7 @@ class ActiveProjectController extends Controller {
 
 
     public function index(){
-        $projects = Project::where('project_manager_id',Auth::user()->user_id)->where('admin_posted', '!=', NULL)->where('project_status', 1 )->get()->all();
+        $projects = Project::where('project_manager_id',Auth::user()->user_id)->where('admin_posted', '!=', NULL)->where('project_status', 2 )->get()->all();
          // dd($projects);
          $data=[];
          if(!empty($projects)){
@@ -55,7 +55,6 @@ class ActiveProjectController extends Controller {
     }
 
     public function projectInfo($projectid){
-
       $project_id=Hashids::decode($projectid);
       $project=Project::where('project_id',$project_id)->first();
       $languages = Language::get()->all();
@@ -76,12 +75,12 @@ class ActiveProjectController extends Controller {
           $data['survey_type']=\EnvatoUser::get_survey_type($project->survey_type_id);
           $data['project_language']=\EnvatoUser::project_related_language($project->language_id);
           if($project->start_date != NULL){
-           $data['start_date']=date("m/d/Y", strtotime($project->start_date));
+           $data['start_date']=date("m-d-Y", strtotime($project->start_date));
           }else{
            $data['start_date']="";
           }
           if($project->end_date != NULL){
-          $data['end_date']=date("m/d/Y", strtotime($project->end_date));
+          $data['end_date']=date("m-d-Y", strtotime($project->end_date));
           }else{
             $data['end_date']="";
           }
@@ -94,35 +93,37 @@ class ActiveProjectController extends Controller {
          }
 
          $weeks_count = ceil($data['project_start_enddate_days_count'] / 7);
-        
-         $end_date = new \Carbon\Carbon($project->end_date);
+         $start_date_week_project = new \Carbon\Carbon($project->start_date);
+         $for_week_end_date_get_only_using_start_date = new \Carbon\Carbon($project->start_date);
+         $end_date_week_project = $for_week_end_date_get_only_using_start_date->addDays(6);
          $w=1;
-         $start_date=[];
-         $projectdatest=Session::get('sessiond');;
+         $wk_dates_week_interval_main=[];
+         $wk_start_end_dates_get_interval=[];
          for($w=1; $w<=$weeks_count;$w++){
-          if($w == 1){
-            $start_dateeee = new \Carbon\Carbon($project->start_date);
-          }
-          $start_dateeee = new \Carbon\Carbon($projectdatest);
-          $start_date = $start_dateeee->addDays(7);
-          Session::put('sessiond', $start_date);
-          $gg[]=$start_date;
+            $wk_start_end_dates_get_interval['start_date'] = new \Carbon\Carbon($start_date_week_project);
+            $add_sevendays_for_start_date = $start_date_week_project->addDays(7);
+            if($w==$weeks_count){
+              $last_week_end_date= new \Carbon\Carbon($end_date_week_project);
+              $last_week_end_date_get=$last_week_end_date->toDateString();
+              $original_project_end_on = new \Carbon\Carbon($project->end_date);
+              $original_project_end_date=$original_project_end_on->toDateString();
+              if($last_week_end_date_get == $original_project_end_date){
+               /* $wk_start_end_dates_get_interval['end_date']='you can show normal lop date';*/
+                $wk_start_end_dates_get_interval['end_date']= new \Carbon\Carbon($end_date_week_project);
+              }else{
+                /*$wk_start_end_dates_get_interval['end_date']='project main end date have to show';*/
+                $wk_start_end_dates_get_interval['end_date']=new \Carbon\Carbon($project->end_date);
+              }
+                 
+            }else{
+              $wk_start_end_dates_get_interval['end_date'] = new \Carbon\Carbon($end_date_week_project);
+            }
+            
+            $add_sixdays_for_end_date = $for_week_end_date_get_only_using_start_date->addDays(7);
+            $wk_dates_week_interval_main[] = $wk_start_end_dates_get_interval;
          }
-         return $gg;
-        
-
-            /*$period = CarbonPeriod::between(Carbon::parse($project->start_date)->format('Y-m-d'), Carbon::parse($project->end_date)->format('Y-m-d'));
-                $weekendFilter = function ($date) {
-                    return $date->isWeekend();
-                };
-                $period->filter($weekendFilter);
-
-                $days = [];
-                foreach ($period as $date) {
-                    $days[] = $date->format('m-d-Y');
-                }
-                return $dates= implode(', ', $days);*/
-        return view('ProjectManager.ManageProjects.ActiveProjects.detail_view_active_project',compact('data','project','languages','survey_types','language_ids','survey_type_ids'));
+         //dd($wk_dates_week_interval_main);
+        return view('ProjectManager.ManageProjects.ActiveProjects.detail_view_active_project',compact('data','project','languages','survey_types','language_ids','survey_type_ids','wk_dates_week_interval_main'));
     }
 
     public function makeSchedule($projectid){

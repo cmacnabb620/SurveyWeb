@@ -82,17 +82,7 @@ class AdminManageProjectController extends Controller {
             $add_new_project->project_status = $request->get('status_id');
             $add_new_project->last_update = $current_time->toDateTimeString();
             $add_new_project->save();
-            //mail link sent to client for roster data update start
-            $client_record=Client::where('client_id',$request->get('client_id'))->first();
-            $client_contact=Contact::where('client_id',$request->get('client_id'))->first();
-            $data = array('client_id'=>Hashids::encode($client_record->client_id),'email'=>Crypt::decryptString($client_contact->email),'client_name'=>Crypt::decryptString($client_record->name),'project_id'=>Hashids::encode($add_new_project->project_id),'project_name' =>$request->get('project_name') ,"body" => "Invitation to client for upload rosterdata");
-
-            $mail_sent=Mail::send('Email.client_roster_data_load_link', $data, function($message) use ($data){
-              $message->to($data['email'], 'Receiver')
-                        ->subject('Crossroads Group Request For Load Rosterdata');
-                $message->from('muralidharan.bora@gmail.com','Sender');         
-            });
-            //mail link sent to client for roster data update start
+          
             return response()->json(['status' => 'success', 'message' => "Project Stored Successfully."]);
            }
            

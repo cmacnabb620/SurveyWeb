@@ -56,6 +56,9 @@ New Project Duration
 						{{ csrf_field() }}
 						<input type="hidden" name="client_id" value="{{$client_record->client_id}}">
 						<input type="hidden" name="project_id" value="{{$project_record->project_id}}">
+						<input type="hidden" name="week_no" value="{{$week_no}}">
+						<input type="hidden" name="week_start_date" value="{{$week_start_date}}">
+						<input type="hidden" name="week_end_date" value="{{$week_end_date}}">
 						<div class="row-fluid ">
 							<div class="control-group">
 								<label class="control-label" for="projectname">Client:</label>
@@ -78,7 +81,7 @@ New Project Duration
 							</div>
 							<div class="row-fluid span4 offset4">
 								<button type="submit" class="btn btn-primary">Upload</button>
-								<button type="button" onclick="goBack()" class="btn btn-importand">Go Back</button>
+								<button type="button" onclick="goBack()" class="btn btn-importand"><i class="halflings-icon chevron-left white"></i>Go Back</button>
 								
 							</div>
 						</div>
@@ -89,7 +92,7 @@ New Project Duration
 		@else
 		<div class="alert alert-success">
 			<ul>
-				<li>Your Roster Data has been Submited.</li>
+				<li>{{$project_record->project_name}}'s of {{$week_no}} roster file already submited </li>
 			</ul>
 		</div>
 		@endif
@@ -98,7 +101,7 @@ New Project Duration
 </div>
 <script type="text/javascript">
 	function goBack(){
-window.location = "{{url('project_manager/active_projects')}}";
+window.location = "{{url('project_manager/active_project_info/'.Hashids::encode($project_record->project_id))}}";
 }
 </script>
 @endsection

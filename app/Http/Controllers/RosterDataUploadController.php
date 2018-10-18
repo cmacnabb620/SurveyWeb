@@ -76,6 +76,7 @@ class RosterDataUploadController extends Controller {
 
     public function storeClientRosterData(Request $request)
     {
+        //return $request->all();
         ini_set('max_execution_time',3600);
         $rules = array(
             'import_file' => 'required|mimes:xls,xlsx',
@@ -90,6 +91,10 @@ class RosterDataUploadController extends Controller {
         $current_time = Carbon::now();
         $csv_data_file = ClientSubmittedRosterInfo::create([
         'roster_filename' => $request->file('import_file')->getClientOriginalName(),
+        'week_number' => $request->get('week_no'),
+        'week_start_date' => $request->get('week_start_date'),
+        'week_end_date' => $request->get('week_end_date'),
+        'flag' => 1,
         'client_id' => $request->get('client_id'),
         'project_id' => $request->get('project_id'),
         'roster_info' => $data,

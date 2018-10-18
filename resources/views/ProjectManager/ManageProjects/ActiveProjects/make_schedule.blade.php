@@ -257,7 +257,7 @@ Project Schedule
       </div>
       <div class="row-fluid padding10">
         <div class="span4 offset4 center">
-          <button type="button" onclick="goBack()" class="btn btn-importand">Go Back</button>
+          <button type="button" onclick="goBack()" class="btn btn-importand"><i class="halflings-icon chevron-left white"></i>Go Back</button>
           <!-- <button type="submit"  class="btn btn-primary">Save</button> -->
           <button type="button" onclick="make_schedule()" class="btn btn-primary">Save</button>
         </div>

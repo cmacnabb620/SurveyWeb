@@ -22,14 +22,15 @@ use Carbon\Carbon;
 class RosterDataUploadController extends Controller {
 
  /*-------Dummy Data Modal--------------*/
-    public function getFileUploadPage($client_id,$project_id){ 
-         
-        $client_record =  Client::where('client_id',Hashids::decode($client_id))->first();
-        $project_record =  Project::where('project_id',Hashids::decode($project_id))->first();
-        $check_client_roster_data_count=ClientSubmittedRosterInfo::where('client_id',Hashids::decode($client_id))->where('project_id',Hashids::decode($project_id))->count();
+public function getFileUploadPage($project_id,$client_id,$week_no,$week_start_date,$week_end_date){
+    $client_record =  Client::where('client_id',Hashids::decode($client_id))->first();
+    $project_record =  Project::where('project_id',Hashids::decode($project_id))->first();
+    $check_client_roster_data_count=ClientSubmittedRosterInfo::where('client_id',Hashids::decode($client_id))->where('project_id',Hashids::decode($project_id))->where('week_number',$week_no)->count();
 
-        return view('ProjectManager.ManageProjects.ActiveProjects.upload_file',compact('client_record','project_record','check_client_roster_data_count'));
-    }
+
+
+    return view('ProjectManager.ManageProjects.ActiveProjects.upload_file',compact('client_record','project_record','check_client_roster_data_count','week_no','week_start_date','week_end_date'));
+}
 
     public function downloadExcel($type,$client_id,$project_id)
     {
