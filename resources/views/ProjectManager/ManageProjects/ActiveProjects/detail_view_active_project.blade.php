@@ -172,7 +172,7 @@ Project Information
 							$exsting_record_check=\DB::table('client_submitted_roster_info')->where('week_start_date',$start_date)->where('week_end_date',$end_date)->count();
 							?>
 
-							<abbr title="Already Uploaded">
+							<abbr title="Upload Roster Data">
 							@if($exsting_record_check == 1)
 							    <a class="btn btn-success" attr="{{ $k++ }}" href="#"><i class="halflings-icon upload white"></i></a>
 							@else
@@ -213,5 +213,17 @@ Project Information
 	function goBack(){
 window.location = "{{url('project_manager/active_projects')}}";
 }
+</script>
+@endsection
+@section('page-script')
+<script type="text/javascript">
+@if(Session::has('message'))
+toastr.options.timeOut = 1500;
+toastr.success("{{ Session::get('message') }}");
+@endif
+@if(Session::has('error'))
+toastr.options.timeOut = 1500;
+toastr.error("{{ Session::get('error') }}");
+@endif
 </script>
 @endsection

@@ -65,11 +65,7 @@ New Projects
 										<i class="halflings-icon white zoom-in"></i>
 									</a>
 								</abbr>
-								@if($project['admin_posted_days_cont']>6)
-								<abbr title="Upload Roster Data">
-									<a class="btn btn-primary" href="{{url('project_manager/upload_roster_data/'.Hashids::encode($project['project_id']).'/'.Hashids::encode($project['client_id']))}}"><i class="halflings-icon upload white"></i></a>
-								</abbr>
-								@endif
+							
 								<!-- @if($project['pm_posted'] != NULL)
 								<abbr title="Project Posted">
 										<a class="btn btn-success"><i class="icon-ok white"></i></a>
@@ -90,4 +86,16 @@ New Projects
 		</div>
 	</div>
 </div>
+@endsection
+@section('page-script')
+<script type="text/javascript">
+@if(Session::has('message'))
+toastr.options.timeOut = 1500;
+toastr.success("{{ Session::get('message') }}");
+@endif
+@if(Session::has('error'))
+toastr.options.timeOut = 1500;
+toastr.error("{{ Session::get('error') }}");
+@endif
+</script>
 @endsection

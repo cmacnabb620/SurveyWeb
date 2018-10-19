@@ -194,7 +194,7 @@ Detail View Completed Project
 	</div>
 	<div class="row-fluid padding10">
 		<div class="span4 offset4 center">
-			<button type="button" onclick="goBack()" class="btn btn-importand">Go Back</button>
+			<button type="button" onclick="goBack()" class="btn btn-default"><i class="halflings-icon chevron-left white"></i>Go Back</button>
 		</div>
 	</div>
 </div>

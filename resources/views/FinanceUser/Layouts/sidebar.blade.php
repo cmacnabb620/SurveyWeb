@@ -11,7 +11,6 @@
 					<span class="hidden-tablet">&nbsp;Surveyors</span>
 				</a>
 			</li>
-
 			<li class="{{{ (Request::is('admin/in') ? 'active' : '') }}}">
 				<!-- <a href="{{ url('admin/admin_invoice') }}"><i class="icon-file"></i> -->
 				<a href="#"><i class="icon-file"></i>

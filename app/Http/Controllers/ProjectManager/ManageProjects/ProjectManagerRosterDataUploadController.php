@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjectManager\ManageProjects;
 
 use App\Http\Controllers\Controller;
 use File;
@@ -18,19 +18,17 @@ use Vinkla\Hashids\Facades\Hashids;
 use DB;
 use App\User;
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
-use Carbon\CarbonPeriod;
 
-class RosterDataUploadController extends Controller {
+class ProjectManagerRosterDataUploadController extends Controller {
 
  /*-------Dummy Data Modal--------------*/
-    public function getFileUploadPage($client_id,$project_id){ 
+public function getFileUploadPage($project_id,$client_id,$week_no,$week_start_date,$week_end_date){
+    $client_record =  Client::where('client_id',Hashids::decode($client_id))->first();
+    $project_record =  Project::where('project_id',Hashids::decode($project_id))->first();
+    $check_client_roster_data_count=ClientSubmittedRosterInfo::where('client_id',Hashids::decode($client_id))->where('project_id',Hashids::decode($project_id))->where('week_number',$week_no)->count();
 
-        $client_record =  Client::where('client_id',Hashids::decode($client_id))->first();
-        $project_record =  Project::where('project_id',Hashids::decode($project_id))->first();
-        $check_client_roster_data_count=ClientSubmittedRosterInfo::where('client_id',Hashids::decode($client_id))->where('project_id',Hashids::decode($project_id))->where('week_number', 'week1')->count();
-        return view('Rosterdata.upload_file',compact('client_record','project_record','check_client_roster_data_count'));
-    }
+    return view('ProjectManager.ManageProjects.ActiveProjects.project_manager_upload_file',compact('client_record','project_record','check_client_roster_data_count','week_no','week_start_date','week_end_date'));
+}
 
     public function downloadExcel($type,$client_id,$project_id)
     {
@@ -77,40 +75,33 @@ class RosterDataUploadController extends Controller {
         return redirect()->back();
     }
 
-    public function storeClientRosterData(Request $request){
+    public function storeClientRosterData(Request $request)
+     {
+        // return $request->all();
         ini_set('max_execution_time',3600);
         $rules = array(
             'import_file' => 'required|mimes:xls,xlsx',
         );
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()){
-            /*return redirect()->back()->withErrors($validator);
-            $this->throwValidationException($request, $validator);*/
-
-            return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400);
+            return redirect()->back()->withErrors($validator);
+            $this->throwValidationException($request, $validator);
         }
         $path = $request->file('import_file')->getRealPath();
         $data = Excel::load($path)->get();
         $current_time = Carbon::now();
-        $project_details = Project::where('project_id',$request->project_id)->first();
-        $start_date = new \Carbon\Carbon($project_details->start_date);
-        $project_start_date = date("m-d-Y", strtotime($start_date));
-        $end_date = $start_date->addDays(6);
-        $project_end_date = date("m-d-Y", strtotime($end_date));
         $csv_data_file = ClientSubmittedRosterInfo::create([
         'roster_filename' => $request->file('import_file')->getClientOriginalName(),
+        'week_number' => $request->get('week_no'),
+        'week_start_date' => $request->get('week_start_date'),
+        'week_end_date' => $request->get('week_end_date'),
+        'flag' => 1,
         'client_id' => $request->get('client_id'),
-        'week_number' => 'week1',
-        'week_start_date' => $project_start_date,
-        'week_end_date' => $project_end_date,
         'project_id' => $request->get('project_id'),
         'roster_info' => $data,
-        'flag' => 1,
         'submitted_date' => $current_time->toDateTimeString()
         ]);
-       /*return redirect()->back()->with('success', 'File Uploaded successfully');*/
-
-       return response()->json(['status' => 'success', 'message' => "File Uploaded successfully."]);
+       return redirect()->back()->with('success', 'File Uploaded successfully');
     }
 
 //Below code for table roster data devide form single column

@@ -214,7 +214,6 @@ class LoginController extends Controller {
     }
 
      public function updateEmaillinkPassword(Request $request){
-      return "hai";
        $new_password=$request->get('new_password');
        $re_password=$request->get('re_password');
        $user_id=$request->get('user_id');

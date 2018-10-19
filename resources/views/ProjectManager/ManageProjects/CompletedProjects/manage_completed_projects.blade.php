@@ -61,3 +61,15 @@ Completed Projects
 	</div>
 </div>
 @endsection
+@section('page-script')
+<script type="text/javascript">
+@if(Session::has('message'))
+toastr.options.timeOut = 1500;
+toastr.success("{{ Session::get('message') }}");
+@endif
+@if(Session::has('error'))
+toastr.options.timeOut = 1500;
+toastr.error("{{ Session::get('error') }}");
+@endif
+</script>
+@endsection

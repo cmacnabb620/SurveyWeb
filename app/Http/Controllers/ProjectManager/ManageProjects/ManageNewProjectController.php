@@ -136,6 +136,7 @@ class ManageNewProjectController extends Controller {
     }
 
      public function updateProjectDate(Request $request){
+
       $rules = array(
             'start_date' => 'required',
             'end_date' => 'required',
@@ -143,14 +144,15 @@ class ManageNewProjectController extends Controller {
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails())
         {
-         return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400);
+          return redirect()->back()->withErrors('error', 'All Fields are Required');
+         /*return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400);*/
         }else{
-                 $update_project_date = Project::where('project_id',$request->project_id)->first();
-                 $update_project_date->start_date = date("Y/m/d",strtotime($request->start_date));
-                 $update_project_date->end_date = date("Y/m/d",strtotime($request->end_date));
-                 //changing the project status from Prospective to Active
-                 $update_project_date->project_status = 2 ;
-                 $update_project_date->save();
+             $update_project_date = Project::where('project_id',$request->project_id)->first();
+             $update_project_date->start_date = date("Y/m/d",strtotime($request->start_date));
+             $update_project_date->end_date = date("Y/m/d",strtotime($request->end_date));
+             //changing the project status from Prospective to Active
+             $update_project_date->project_status = 2 ;
+             $update_project_date->save();
 
             //mail link sent to client for roster data update start
             $client_record=Client::where('client_id',$update_project_date->client_id)->first();
@@ -165,7 +167,8 @@ class ManageNewProjectController extends Controller {
             //mail link sent to client for roster data update start
 
                 
-                return response()->json(['status' => 'success', 'message' => "Project Dates are Updated"]);
+          // return response()->json(['status' => 'success', 'message' => "Project Dates are Updated"]);
+          return redirect('project_manager/active_projects')->with('message', 'Project Dates are updated successfully.');
         }
 
     }

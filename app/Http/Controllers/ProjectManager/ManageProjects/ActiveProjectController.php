@@ -122,7 +122,7 @@ class ActiveProjectController extends Controller {
             $add_sixdays_for_end_date = $for_week_end_date_get_only_using_start_date->addDays(7);
             $wk_dates_week_interval_main[] = $wk_start_end_dates_get_interval;
          }
-         //dd($wk_dates_week_interval_main);
+         // dd($wk_dates_week_interval_main);
         return view('ProjectManager.ManageProjects.ActiveProjects.detail_view_active_project',compact('data','project','languages','survey_types','language_ids','survey_type_ids','wk_dates_week_interval_main'));
     }
 

@@ -23,7 +23,11 @@ Route::group(['namespace' => 'ProjectManager','prefix' => 'project_manager','mid
     Route::get('/active_projects','ManageProjects\ActiveProjectController@index');
     Route::get('/make_schedule/{project_id}','ManageProjects\ActiveProjectController@makeSchedule');
     Route::get('/active_project_info/{project_id}','ManageProjects\ActiveProjectController@projectInfo');
-    Route::get('/upload_roster_data/{project_id}/{client_id}/{week_no}/{week_startdate}/{week_end_date}','ManageProjects\RosterDataUploadController@getFileUploadPage');
+    Route::get('/upload_roster_data/{project_id}/{client_id}/{week_no}/{week_startdate}/{week_end_date}','ManageProjects\ProjectManagerRosterDataUploadController@getFileUploadPage');
+    
+    Route::get('downloadExcel/{type}/{clientid}/{projectid}','ManageProjects\ProjectManagerRosterDataUploadController@downloadExcel');
+    
+    Route::post('store_roster_file_data','ManageProjects\ProjectManagerRosterDataUploadController@storeClientRosterData');
     /* Active Projects Routes starts*/
 
     /********************Completed Projects Routes Starts**********************/

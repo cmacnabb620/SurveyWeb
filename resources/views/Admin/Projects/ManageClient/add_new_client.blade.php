@@ -102,7 +102,7 @@ Add New Client
           </div>
         </div> 
         <div class="span5 offset4">
-          <button type="button" onclick="redirect()" class="btn btn-default">Go Back</button>
+          <button type="button" onclick="redirect()" class="btn btn-default"><i class="halflings-icon chevron-left white"></i>Go Back</button>
           <button type="button" onclick="reset()" class="btn btn-warning">Reset</button>
           <!-- <button type="submit" class="btn btn-primary">Save</button> -->
           <button type="button"  class="btn btn-primary" onclick="javascript:return clientDetailsCheck();" >Save</button>

@@ -23,7 +23,8 @@ New Project Duration
         </div>
       </div>
       <div class="box-content">
-        <form class="form-horizontal" method="POST" id="updateProjectDate">
+        <!-- <form class="form-horizontal" method="POST" id="updateProjectDate">  -->
+        <form class="form-horizontal"  action="{{url('project_manager/update_project_date')}}"  method="POST" id="updateProjectDate">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <input type="hidden" value="{{$data['project_id']}}" name="project_id">
           <div class="row-fluid padding10">
@@ -53,8 +54,8 @@ New Project Duration
           <div class="row-fluid padding10">
             <div class="span4 offset4">
               <button type="button" onclick="reset()" class="btn btn-importand">Reset</button>
-              <!-- <button type="submit"  class="btn btn-primary">Save</button> -->
-              <button type="button" onclick="projectDateCheck()" class="btn btn-primary">Save</button>
+              <button type="submit"  class="btn btn-primary">Save</button>
+             <!--  <button type="button" onclick="projectDateCheck()" class="btn btn-primary">Save</button> -->
             </div>
           </div>
         </form>
@@ -112,6 +113,7 @@ success: function(res)
 hideProcessingOverlay();
 toastr.options.timeOut = 1500; // 1.5s
 toastr.success('Project Dates are Updated Successfully.');
+window.location = "{{url('project_manager/active_projects')}}";
 },
 error: function (errormessage) {
 // alert(errormessage);

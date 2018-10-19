@@ -120,7 +120,7 @@ Project Information
 	</div>
 	<div class="row-fluid padding10">
         <div class="span4 offset4 center">
-          <button type="button" onclick="goBack()" class="btn btn-importand">Go Back</button>				
+          <button type="button" onclick="goBack()" class="btn btn-default"><i class="halflings-icon chevron-left white"></i>Go Back</button>				
         </div>
       </div>
 	
@@ -177,5 +177,17 @@ Project Information
 	function goBack(){
    window.location = "{{url('project_manager/new_projects')}}";
 }
+</script>
+@endsection
+@section('page-script')
+<script type="text/javascript">
+@if(Session::has('message'))
+toastr.options.timeOut = 1500;
+toastr.success("{{ Session::get('message') }}");
+@endif
+@if(Session::has('error'))
+toastr.options.timeOut = 1500;
+toastr.error("{{ Session::get('error') }}");
+@endif
 </script>
 @endsection
